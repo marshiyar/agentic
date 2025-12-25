@@ -1,123 +1,38 @@
 # Agentic
 
-**Build your startup with AI agents instead of employees.**
-
-You're one person. But when you clone this repo and type `claude`, you have a team: product managers, designers, engineers, QA, security, DevOps—14 specialists ready to build whatever you're building.
-
-No hiring. No managing. No payroll. Just building.
+A framework for working with AI agents like a team.
 
 ---
 
-## What Happens
+## The Reality
 
-```
-~/projects $ git clone https://github.com/jasonhoffman/agentic ~/.agentic
-~/projects $ cd ~/.agentic
-~/projects/.agentic $ claude
-```
+You're at your desk. You ask Claude to build an API. It starts working.
 
-```
-Welcome to Agentic.
+Now you're waiting.
 
-I'm your Chief of Staff. I'll help you build your company with AI agents.
+So you open another terminal. Ask it to work on the frontend. Now two things are moving.
 
-What are you building?
-```
+You open a third terminal and start a product conversation. Now *you're* working too.
 
-```
-You: A mobile app for dog walkers
-
-Chief of Staff: Great. Let me set up your project.
-
-[creates ~/projects/dogwalker]
-[copies templates]
-
-Tell me more — who's the primary user, dog owners or walkers?
-
-[conversation continues, vision takes shape]
-
-Chief of Staff: Vision captured. Ready to start building.
-What should we tackle first?
-```
-
-When it's time to build, they bring in specialists:
-
-```
-You: I need the user authentication built
-
-Chief of Staff: Let me bring in the Backend Engineer.
-
-Backend Engineer: I'll design the auth flow. Looking at your stack...
-[builds the API, writes tests, documents the endpoints]
-
-Backend Engineer: Auth API complete. Ready for frontend.
-
-Chief of Staff: Bringing in the Frontend Engineer.
-
-Frontend Engineer: I see the API is ready. Building the login screens...
-[builds the UI, connects to API, handles errors]
-
-Frontend Engineer: Login flow complete.
-
-Chief of Staff: Ready for QA?
-```
-
-One conversation. Multiple specialists. You make decisions. They do the work.
+**The goal: the human is always doing something productive.**
 
 ---
 
-## Your Team
+## What This Is
 
-| Role | What They Do |
-|------|--------------|
-| **Chief of Staff** | Your right hand. Orchestrates everything. |
-| **Product Manager** | Defines what to build. Writes specs. |
-| **UX Designer** | Designs how it works. User flows. |
-| **UI Designer** | Designs how it looks. Visual polish. |
-| **Backend Engineer** | APIs, databases, server logic. |
-| **Frontend Engineer** | UI implementation. Screens and components. |
-| **QA Engineer** | Testing. Finding bugs. Verifying quality. |
-| **Security Engineer** | Security review before you ship. |
-| **Platform Engineer** | Deployment. Infrastructure. DevOps. |
-| **Data Analyst** | Metrics and insights. |
-| **Growth Engineer** | Experiments and optimization. |
-| **Technical Writer** | Documentation. |
-| **Customer Success** | User feedback synthesis. |
-| **Project Manager** | Status tracking. Coordination. |
-| **Operations Manager** | Process optimization. |
+This repo gives Claude context about how to work like a team:
 
----
+- **Roles** — Backend Engineer, Frontend Engineer, Product Manager, QA, etc.
+- **Coordination** — Shared docs so parallel work doesn't conflict
+- **Handoffs** — Explicit notes when one role finishes and another starts
+- **Simple commands** — `wrap` closes out work cleanly, `status` shows state
 
-## Three Commands
+The roles map to a real company's org chart. But unlike a real company:
 
-Your entire vocabulary:
-
-| Say | Get |
-|-----|-----|
-| `today` | Morning briefing. What needs your attention. |
-| `status` | Where everything stands right now. |
-| `wrap` | Close out work. Commit, document, clean up. |
-
-Everything else is conversation.
-
----
-
-## The Flow
-
-```
-Morning:
-  $ claude
-  You: today
-  → See what needs attention, make decisions, set focus
-
-Working:
-  You: Let's build the payment flow
-  → Chief of Staff brings in specialists, work happens
-
-Done:
-  You: wrap
-  → Everything documented, committed, cleaned up
-```
+- Any role can do anything (it's all Claude)
+- You can run 10 of the same role in parallel
+- Coordination happens through docs, not meetings
+- Handoffs happen through files, not conversations
 
 ---
 
@@ -129,29 +44,104 @@ cd ~/.agentic
 claude
 ```
 
-The Chief of Staff takes it from there.
+Say "hi" or "what are you building?" — it picks up from there.
+
+---
+
+## Parallel Work
+
+The multiplier isn't speed — it's concurrency.
+
+```
+Terminal 1              Terminal 2              Terminal 3
+─────────────────────   ─────────────────────   ─────────────────────
+cd ~/project            cd ~/project            cd ~/project
+claude                  claude                  claude
+
+"You're Backend.        "You're Frontend.       "You're QA. Test
+Build profiles API."    Build profile screen."  the auth flow."
+
+[works]                 [works]                 [works]
+```
+
+Each terminal works independently. They coordinate through `docs/_AGENTS.md` — who's doing what, what's done, what's next.
+
+Without this coordination, parallel work stomps on itself. With it, you get clean handoffs and no conflicts.
+
+---
+
+## The Roles
+
+| Role | Focus |
+|------|-------|
+| **Chief of Staff** | Orchestration, project setup, context |
+| **Product Manager** | Specs, priorities, user stories |
+| **UX Designer** | User flows, wireframes |
+| **UI Designer** | Visual design, styling |
+| **Backend Engineer** | APIs, database, server logic |
+| **Frontend Engineer** | UI, screens, components |
+| **QA Engineer** | Testing, quality |
+| **Security Engineer** | Security review |
+| **Platform Engineer** | Deploy, CI/CD, infra |
+| **Data Analyst** | Metrics, analytics |
+| **Growth Engineer** | Experiments, optimization |
+| **Technical Writer** | Documentation |
+| **Customer Success** | User feedback |
+| **Project Manager** | Status, coordination |
+| **Operations Manager** | Process optimization |
+
+These are focus areas, not capability limits. Backend can write frontend code. The structure exists for coordination, not gatekeeping.
+
+---
+
+## Commands
+
+| Say | Get |
+|-----|-----|
+| `hi` / `morning` | Status check, pick up where you left off |
+| `status` | Current state of everything |
+| `today` | What needs attention |
+| `wrap` | Close out work — document, commit, clean up |
+
+Everything else is conversation.
+
+---
+
+## What Gets Handled Automatically
+
+The mundane stuff people skip when moving fast:
+
+- Update status docs → agents do it
+- Write handoff notes → `wrap` does it
+- Commit with good messages → `wrap` does it
+- Clean up stale items → `wrap` does it
+- Verify "done" means done → `wrap` does it
+
+You say `wrap`, the hygiene happens.
+
+---
+
+## What You're Learning
+
+Even as a solo founder, you're learning to run a team:
+
+- **Delegation** — Clear scope for each terminal
+- **Documentation** — So parallel work doesn't conflict
+- **Handoffs** — Explicit "done, here's what you need to know"
+- **Professional workflow** — The stuff real teams do
+
+When you hire, you already know how to work this way.
 
 ---
 
 ## Reference
 
-When you want to understand more:
-
-| Doc | What's There |
-|-----|--------------|
-| [AGENTS.md](AGENTS.md) | Your team of 14 specialists |
-| [TECH_STACK.md](TECH_STACK.md) | The default stack (Expo, Supabase, Claude) |
-| [reference/](reference/) | Deep dives on roles, concepts, workflows |
+| Doc | What |
+|-----|------|
+| [AGENTS.md](AGENTS.md) | The roles |
+| [TECH_STACK.md](TECH_STACK.md) | Default tech choices |
+| [reference/](reference/) | Deep dives |
 
 ---
 
-## The Promise
-
-You can build a real product—specced, designed, built, tested, secured, deployed—without hiring anyone.
-
-Clone the repo. Type `claude`. Start building.
-
----
-
-MIT License © 2025 Jason A. Hoffman
-
+MIT License

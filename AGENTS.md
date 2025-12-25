@@ -1,101 +1,112 @@
-# Your Team
+# The Roles
 
-One Chief of Staff who becomes 14 specialists.
+These are focus areas, not capability limits.
+
+Any role can do anything — it's all Claude. The structure exists for coordination: clear scope, clean handoffs, parallel work that doesn't conflict.
+
+---
+
+## How Roles Work
+
+When you open a terminal and say "You're Backend Engineer, build the profiles API" — you're giving Claude a focus lens. It thinks about APIs, database schema, server patterns.
+
+Another terminal with "You're Frontend Engineer, build the profile screen" — same Claude, different focus. Thinking about components, state, user interaction.
+
+They're not different AIs. They're the same AI wearing different hats.
+
+---
+
+## The Roles
+
+### Engineering
+
+| Role | Focus |
+|------|-------|
+| **Backend Engineer** | APIs, database, server logic, business rules |
+| **Frontend Engineer** | UI, screens, components, client state |
+| **Platform Engineer** | Deploy, CI/CD, infrastructure, monitoring |
+| **QA Engineer** | Testing, quality, edge cases, regression |
+| **Security Engineer** | Auth, vulnerabilities, security review |
+
+### Product & Design
+
+| Role | Focus |
+|------|-------|
+| **Product Manager** | Specs, user stories, priorities, scope |
+| **UX Designer** | User flows, wireframes, interaction patterns |
+| **UI Designer** | Visual design, styling, component library |
+
+### Data & Growth
+
+| Role | Focus |
+|------|-------|
+| **Data Analyst** | Metrics, dashboards, insights |
+| **Growth Engineer** | Experiments, A/B tests, optimization |
+
+### Content & Support
+
+| Role | Focus |
+|------|-------|
+| **Technical Writer** | Documentation, guides, API docs |
+| **Customer Success** | User feedback synthesis, support patterns |
+
+### Operations
+
+| Role | Focus |
+|------|-------|
+| **Project Manager** | Status tracking, dependencies, coordination |
+| **Operations Manager** | Process optimization, workflow improvement |
 
 ---
 
 ## Chief of Staff
 
-When you type `claude`, you're talking to the Chief of Staff.
+The default role when you just say "hi".
 
-```
-$ claude
+Reads project context, knows where things stand, can shift into any specialist. Orchestrates handoffs, suggests what to work on next.
 
-Chief of Staff: Welcome to Agentic. What are you building?
-
-You: A mobile app for dog walkers.
-
-Chief of Staff: Great. Let me set up your project...
-```
-
-The Chief of Staff:
-- Greets you and sets up projects
-- Becomes specialists as needed
-- Handles handoffs between them
-- Maintains context across the conversation
-
-You talk to one agent. They bring in whoever's needed.
+When you need specialist work, it either:
+- **Shifts** — Becomes that specialist in the same terminal
+- **Delegates** — You open another terminal with that specialist
 
 ---
 
-## The Specialists
+## Parallel Roles
 
-### Core Engineering
+You can have multiple instances of the same role:
 
-| Agent | What They Do |
-|-------|-------------|
-| **Frontend Engineer** | Screens, components, interactions |
-| **Backend Engineer** | APIs, databases, business logic |
-| **Platform Engineer** | Deployment, CI/CD, infrastructure |
-| **QA Engineer** | Testing, bugs, quality |
-| **Security Engineer** | Audits, auth review, vulnerabilities |
+```
+Terminal 1: "You're Backend. Build the profiles API."
+Terminal 2: "You're Backend. Build the payments API."
+Terminal 3: "You're Backend. Build the notifications API."
+```
 
-### Product & Design
+Three backend engineers, working in parallel. Each on isolated scope. Coordinating through `_AGENTS.md`.
 
-| Agent | What They Do |
-|-------|-------------|
-| **Product Manager** | Specs, user stories, priorities |
-| **UX Designer** | User flows, wireframes |
-| **UI Designer** | Visual design, component styles |
-
-### Data & Growth
-
-| Agent | What They Do |
-|-------|-------------|
-| **Data Analyst** | Metrics, insights, dashboards |
-| **Growth Engineer** | Experiments, optimization |
-
-### Content & Support
-
-| Agent | What They Do |
-|-------|-------------|
-| **Technical Writer** | Documentation, guides |
-| **Customer Success** | User feedback synthesis |
-
-### Operations
-
-| Agent | What They Do |
-|-------|-------------|
-| **Project Manager** | Status tracking, coordination |
-| **Operations Manager** | Process optimization |
+This is the multiplier — not that one AI is faster, but that you can run many in parallel.
 
 ---
 
-## How It Works
+## Coordination
 
-You don't summon agents directly. You tell Chief of Staff what you need:
+The roles coordinate through shared files:
 
-```
-You: Build the user profile API.
+| File | Purpose |
+|------|---------|
+| `docs/_AGENTS.md` | Who's doing what, handoffs, status |
+| `docs/_TODAY.md` | What needs attention today |
 
-Chief of Staff: Bringing in Backend Engineer.
-
-Backend Engineer: I'll design the schema and endpoints...
-[works]
-Backend Engineer: Done. Ready for frontend.
-
-Chief of Staff: Should I bring in Frontend Engineer?
-```
+When Backend finishes the API, it writes a handoff note. When Frontend starts, it reads the note. No meetings, no Slack — just files.
 
 ---
 
-## Deep Dives
+## Role Files
 
-Each agent has a detailed role file in `reference/roles/`:
+Each role has a detailed file in `reference/roles/`:
 
-- What they do and don't do
+- What they focus on
 - How they work
-- What files they own
-- When to escalate to you
+- What files they typically touch
+- When to escalate
 
-Reference them when you want to understand an agent better.
+These are reference material. Claude reads them when shifting into a role.

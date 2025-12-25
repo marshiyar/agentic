@@ -1,117 +1,146 @@
 # How It Works
 
-The mechanics behind your AI team. Read this after you've used Agentic and want to understand what's happening.
+The practical mechanics.
 
 ---
 
-## Agents
+## The Basic Loop
 
-Agents are AI given a specific role and context. When you ask for something:
+You're at your desk. You open a terminal and ask Claude to do something. It starts working.
 
-1. The right agent reads its role
-2. Reads project status
-3. Does the work
-4. Updates status for you and other agents
+Now you're waiting.
 
-Agents don't have memory between sessions. They get context by reading files. Everything important is written down.
+So you open another terminal. Start something else. Now two things are moving.
+
+You open a third terminal and have a conversation — product planning, reviewing specs, whatever. Now you're working too.
+
+**The goal: always be doing something productive while agents work.**
 
 ---
 
-## The Flow
+## Why Roles Exist
 
-You say what you want. Agents make it happen.
+Roles give Claude a focus lens:
+
+- "You're Backend" → thinking about APIs, database, server patterns
+- "You're Frontend" → thinking about components, state, user flows
+- "You're QA" → thinking about edge cases, test coverage, breaking things
+
+Same AI, different hat. The structure exists for two reasons:
+
+1. **Focus** — Clearer thinking within a domain
+2. **Coordination** — Parallel work that doesn't conflict
+
+---
+
+## Parallelism
+
+The multiplier isn't speed. It's concurrency.
 
 ```
-You: Build password reset.
+Traditional:
+  1 person → 1 task → waiting → next task
 
-[Product Manager specs it]
-[Designer flows it]
-[Engineers build it]
-[QA tests it]
-[Security reviews it]
+Agentic:
+  Terminal 1 → Backend building API
+  Terminal 2 → Frontend building screen
+  Terminal 3 → You discussing product
 
-Chief of Staff: Password reset ready. Ship it?
-
-You: Ship it.
-
-Chief of Staff: Live.
+  All happening simultaneously.
 ```
 
-Behind the scenes, agents hand off to each other. You don't manage that.
+To make this work, parallel sessions need to know about each other. That's what `_AGENTS.md` is for.
 
 ---
 
-## Your Three Decision Points
+## Coordination Through Files
 
-You're not involved in every step. Just three:
+Agents don't talk to each other. They read and write files.
 
-1. **Approve the spec** — Before work starts
-2. **Approve security** — Before shipping
-3. **Approve ship** — When it goes live
+| File | Purpose |
+|------|---------|
+| `_AGENTS.md` | Who's doing what, handoffs, blockers |
+| `_TODAY.md` | What needs attention today |
 
-Everything else flows automatically.
+When Backend finishes:
+1. Updates `_AGENTS.md` — "Profiles API done, ready for frontend"
+2. Writes handoff note — "Endpoints: GET/POST /api/profiles, types in lib/types.ts"
+
+When Frontend starts:
+1. Reads `_AGENTS.md` — sees the handoff
+2. Knows exactly where to start
+
+No meetings. No Slack. Just files.
+
+---
+
+## The `wrap` Command
+
+The mundane stuff people skip:
+
+- Update status docs
+- Write handoff notes
+- Commit with good message
+- Clean up stale items
+- Verify done means done
+
+You say `wrap`, all of this happens. One word, hygiene complete.
 
 ---
 
 ## What You Decide vs What Agents Decide
 
 **You decide:**
-- What to build and why
+- What to build
 - What's in scope
 - When to ship
 - Acceptable risk
 
 **Agents decide:**
-- How to code it
-- Which libraries to use
-- How to structure it
-- How to test it
+- How to implement
+- Code structure
+- Library choices
+- Test approach
 
-The rule: You decide *what*. Agents figure out *how*.
-
----
-
-## Coordination
-
-Agents coordinate through shared files:
-
-| File | Purpose |
-|------|---------|
-| `_TODAY.md` | What needs your attention |
-| `_AGENTS.md` | Agent status and handoffs |
-| `_VISION.md` | What you're building |
-| `_ROADMAP.md` | Priorities |
-
-When Backend finishes an API, they write a note. When Frontend starts, they read it.
+You own the *what*. They figure out the *how*.
 
 ---
 
-## The Phases
+## Checkpoints
 
-```
-IDEA → SPEC → DESIGN → BUILD → TEST → SECURITY → PERFORMANCE → SHIP
-```
+You're not involved in every step. Just key moments:
 
-| Phase | Agent | You Involved? |
-|-------|-------|---------------|
-| Spec | Product Manager | **Yes** |
-| Design | UX/UI Designer | No |
-| Build | Engineers | No |
-| Test | QA Engineer | Only if bugs |
-| Security | Security Engineer | **Yes** |
-| Performance | Platform Engineer | Only if issues |
-| Ship | Platform Engineer | **Yes** |
+1. **Approve scope** — Before significant work starts
+2. **Approve security** — Before shipping auth or sensitive features
+3. **Approve ship** — When it goes live
+
+Everything else flows without you.
 
 ---
 
-## The Leverage
+## Single Terminal vs Multiple
 
-You *can* do everything yourself. But you shouldn't.
+**Single terminal:**
+- Chief of Staff shifts between roles
+- Sequential work
+- You follow along
 
-With agents:
-- You set direction (minutes)
-- Agents execute (hours of equivalent work)
-- You review (minutes)
-- Repeat
+**Multiple terminals:**
+- Each has a dedicated role
+- Parallel work
+- You orchestrate between them
 
-Your judgment applied to more work. That's leverage.
+Start with single. Add terminals when you have independent work that can happen in parallel.
+
+---
+
+## The Learning
+
+Even as a solo founder, you're practicing team skills:
+
+- **Delegation** — Clear scope for each terminal
+- **Documentation** — So parallel work doesn't conflict
+- **Handoffs** — Explicit "done, here's what you need"
+- **Process** — The hygiene real teams need
+
+When you hire, you already know how to work this way.
