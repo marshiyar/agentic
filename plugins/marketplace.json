@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    {
+      "name": "agentic-wrap",
+      "description": "Close out work with handoff notes, code review, and structured commits",
+      "path": "./wrap"
+    },
+    {
+      "name": "agentic-status",
+      "description": "Check coordination state across terminals",
+      "path": "./status"
+    }
+  ]
+}
