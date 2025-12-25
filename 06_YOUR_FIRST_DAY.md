@@ -18,75 +18,61 @@ Today is day one of actually building.
 
 ## Morning (9:00 AM)
 
-### Open _TODAY.md
-
-This is your morning briefing. On day one, it looks like:
-
-```markdown
-# Today
-
-*Last updated: [Date] — 8:45 AM by Product Manager*
-
-## Quick Status
-
-| Metric | Count |
-|--------|-------|
-| Blocking decisions | 1 |
-| Checkpoints pending | 0 |
-| Ready to ship | 0 |
-
-## Needs Your Attention
-
-### Blocking Decision
-
-**Tech Stack: React Native or Flutter?**
-- Package: All
-- Agent: Backend Engineer (surfaced during architecture)
-- Rec: React Native (larger ecosystem, you know JavaScript)
-- Blocking: Can't start building until decided
-
-## Package Status
-
-| Package | Phase | State |
-|---------|-------|-------|
-| User Registration | Spec | ✅ Approved |
-| — | Architecture | Waiting on tech stack decision |
 ```
+$ claude
 
-### Make the Decision
+You: today
 
-The Backend Engineer asked about tech stack. They gave a recommendation. You decide:
+Chief of Staff: Good morning. Here's what needs your attention:
 
-"React Native. Update `_ARCHITECTURE.md` and proceed."
+**Blocking:**
+- Tech Stack: React Native or Flutter?
+  Backend Engineer recommends React Native (larger ecosystem, you know JS)
 
-Now the Architecture phase can complete.
+**Package Status:**
+- User Registration: Spec approved, waiting on tech stack to start architecture
+
+What's your call on the tech stack?
+
+You: React Native.
+
+Chief of Staff: Done. Updated _ARCHITECTURE.md.
+Backend Engineer can start on User Registration now.
+Want me to bring them in?
+
+You: Yes.
+
+Chief of Staff: Let me bring in the Backend Engineer.
+```
 
 ---
 
 ## Mid-Morning (10:00 AM)
 
-### Activate the Backend Engineer
+The Chief of Staff shifted to Backend Engineer:
 
 ```
-You are ~/projects/agentic/reference/roles/backend-engineer.md
+Backend Engineer: I see the tech stack is React Native + Supabase.
+For User Registration, I'll:
+1. Design the users table in Supabase
+2. Set up Supabase auth
+3. Create the registration endpoint
+4. Write tests
 
-Tech stack is decided: React Native frontend, Supabase backend.
-Read docs/_AGENTS.md and start the User Registration backend:
-- Design the database schema
-- Create the auth API
-- Write tests
+I'll update you when it's ready for frontend.
+
+[Backend Engineer works]
+
+Backend Engineer: Backend complete.
+- Users table created
+- Registration endpoint working
+- 8 tests passing
+- Handoff notes written for Frontend Engineer
+
+Ready for frontend?
 ```
 
-### Let Them Work
-
-The Backend Engineer:
-- Designs the users table
-- Sets up Supabase auth
-- Creates registration endpoint
-- Writes tests
-- Updates `_AGENTS.md` with handoff notes for Frontend
-
-**Time spent by you:** 5 minutes to activate
+**Time spent by you:** 2 minutes
 **Work done by agent:** 2-3 hours equivalent
 
 ---
@@ -105,117 +91,79 @@ You don't need to watch. The agent is working.
 
 ## Early Afternoon (1:00 PM)
 
-### Check Status
-
-Look at `_TODAY.md` or `_AGENTS.md`:
-
-```markdown
-## Quick Status
-
-| Metric | Count |
-|--------|-------|
-| Blocking decisions | 0 |
-| Checkpoints pending | 0 |
-| Ready to ship | 0 |
-
-## Since This Morning
-
-**Completed:**
-- ✅ User Registration backend (Backend Engineer)
-
-## Package Status
-
-| Package | Phase | State |
-|---------|-------|-------|
-| User Registration | Backend → Frontend | Ready for Frontend |
-```
-
-### Activate the Frontend Engineer
+You check back in:
 
 ```
-You are ~/projects/agentic/reference/roles/frontend-engineer.md
+You: Yes, bring in frontend.
 
-Read docs/_AGENTS.md. The backend for User Registration is ready.
-Build the registration screens.
+Chief of Staff: Bringing in Frontend Engineer.
+
+Frontend Engineer: I've read the backend handoff notes.
+Building the registration screens now:
+- Registration form
+- Email validation
+- Password requirements
+- Error handling
+
+[Frontend Engineer works]
+
+Frontend Engineer: Registration UI complete.
+- Form with validation
+- Connected to Supabase auth
+- Error states handled
+- Ready for QA
+
+Want me to bring in QA?
 ```
-
-### Let Them Work
-
-The Frontend Engineer:
-- Reads the handoff notes
-- Builds the registration form
-- Connects to the API
-- Handles errors and loading states
-- Updates `_AGENTS.md`
 
 ---
 
 ## Late Afternoon (4:00 PM)
 
-### Check Status Again
-
-```markdown
-## Since This Afternoon
-
-**Completed:**
-- ✅ User Registration frontend (Frontend Engineer)
-
-## Package Status
-
-| Package | Phase | State |
-|---------|-------|-------|
-| User Registration | Frontend → Test | Ready for QA |
 ```
+You: Yes, QA.
 
-### Activate QA Engineer
+Chief of Staff: Bringing in QA Engineer.
 
+QA Engineer: Testing User Registration now.
+- Happy path: ✅
+- Invalid email: ✅
+- Weak password: ✅
+- Network error: ✅
+- Already registered: ✅
+
+Found 1 issue:
+- Password validation accepts leading/trailing spaces
+- Severity: Low
+- Suggest: Trim password input
+
+Otherwise ready for security review.
 ```
-You are ~/projects/agentic/reference/roles/qa-engineer.md
-
-Read docs/_AGENTS.md. Test the User Registration feature.
-```
-
-The QA Engineer:
-- Tests the happy path
-- Tests error cases
-- Verifies the acceptance criteria
-- Reports any bugs
 
 ---
 
 ## End of Day (6:00 PM)
 
-### Final Status
-
-```markdown
-# Today
-
-## Summary
-
-**Packages progressed:** 1
-**Phases completed:** 3 (Backend, Frontend, Test)
-**Blocking decisions:** 0
-**Bugs found:** 1 (minor — password validation edge case)
-
-## Package Status
-
-| Package | Phase | State |
-|---------|-------|-------|
-| User Registration | Test | Bug found — back to Frontend |
-
-## Bug Report
-
-**Password validation accepts spaces**
-- Severity: Low
-- Fix: Add trim to password input
-- Assigned: Frontend Engineer
 ```
+You: Fix the password bug, then wrap.
 
-### The Bug Goes Back
+Chief of Staff: Frontend Engineer is fixing it now.
 
-The Frontend Engineer will fix the bug. Then QA will retest. Then Security will review. Then Ship.
+Frontend Engineer: Fixed. Added trim to password input. Tests updated.
 
-That's tomorrow.
+Chief of Staff: QA, quick retest?
+
+QA Engineer: Retested. Pass. ✅
+
+Chief of Staff:
+
+Wrap Summary:
+- Committed: "feat(auth): user registration with Supabase"
+- User Registration: Backend ✅ Frontend ✅ QA ✅
+- Ready for: Security review tomorrow
+
+Good first day.
+```
 
 ---
 
@@ -223,17 +171,17 @@ That's tomorrow.
 
 | Time | Activity | Duration |
 |------|----------|----------|
-| 9:00 | Read `_TODAY.md`, made tech stack decision | 10 min |
-| 10:00 | Activated Backend Engineer | 5 min |
-| 10:05-1:00 | Did other founder work | — |
-| 1:00 | Checked status, activated Frontend Engineer | 10 min |
-| 1:10-4:00 | Did other founder work | — |
-| 4:00 | Checked status, activated QA Engineer | 10 min |
-| 6:00 | Read end-of-day status | 5 min |
+| 9:00 | Said `today`, decided on React Native | 5 min |
+| 10:00 | Said yes to backend, went to do founder work | 1 min |
+| 10:00-1:00 | Did other founder work | — |
+| 1:00 | Said yes to frontend | 1 min |
+| 1:00-4:00 | Did other founder work | — |
+| 4:00 | Said yes to QA | 1 min |
+| 6:00 | Said `wrap` | 2 min |
 
-**Total time managing agents: ~40 minutes**
+**Total time in Claude: ~10 minutes**
 
-**Work accomplished:** Full feature built and tested (just one bug to fix)
+**Work accomplished:** Full feature built, tested, bug fixed, committed
 
 ---
 
@@ -241,18 +189,18 @@ That's tomorrow.
 
 ```
 Morning:
-├── Read _TODAY.md
-├── Clear any blocking decisions
-└── Activate agents for new phases
+├── $ claude
+├── You: today
+├── Make decisions
+└── Say yes to agents
 
 Throughout the day:
 ├── Do your founder work
-├── Check in when phases complete
-└── Activate next agents
+├── Agents work and check in
+└── You say yes/no/wait
 
 Evening:
-├── Read final status
-├── Know what's ready for tomorrow
+├── You: wrap
 └── Done
 ```
 
@@ -302,22 +250,34 @@ Your first handoff between agents is a milestone. Your first bug found by QA is 
 
 ## What Day Two Looks Like
 
-You wake up. Open `_TODAY.md`:
-
-```markdown
-## Your Morning
-
-1. **Bug fix ready for review**
-   - Password validation fixed
-   - QA re-tested: Pass
-
-2. **Security review pending**
-   - Package: User Registration
-   - Agent: Security Engineer
-   - Status: Ready for your activation
 ```
+$ claude
 
-Activate Security Engineer. They review. Approve. Activate Platform Engineer. Ship.
+You: today
+
+Chief of Staff: Good morning.
+
+**Ready for security review:**
+- User Registration (passed QA yesterday)
+
+Want me to bring in Security Engineer?
+
+You: Yes.
+
+[Security Engineer reviews]
+
+Security Engineer: Reviewed. No issues. Approved for production.
+
+Chief of Staff: Ready to ship. Bring in Platform Engineer?
+
+You: Ship it.
+
+[Platform Engineer deploys]
+
+Platform Engineer: Deployed to production. User registration is live.
+
+Chief of Staff: 🎉 First feature shipped.
+```
 
 **Day two: First feature shipped.**
 
@@ -325,13 +285,13 @@ Activate Security Engineer. They review. Approve. Activate Platform Engineer. Sh
 
 ## Summary
 
-| Moment | What You Do |
-|--------|-------------|
-| Morning | Read `_TODAY.md`, clear decisions |
-| Throughout | Check status, activate agents |
-| Evening | Review progress, plan tomorrow |
+| Moment | What You Say |
+|--------|--------------|
+| Morning | `today` → make decisions |
+| Throughout | `status` → say yes/no |
+| Evening | `wrap` |
 
-**Core rhythm:** Read → Decide → Activate → Let them work → Repeat
+**Core rhythm:** Decide → Let them work → Repeat
 
 ---
 

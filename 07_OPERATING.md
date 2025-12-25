@@ -8,52 +8,63 @@ The daily and weekly rhythm once you're up and running.
 
 After your first few days, you'll settle into a pattern:
 
-### Morning (15 minutes)
+### Morning (5 minutes)
 
 ```
-1. Open _TODAY.md
-   ├── Any blocking decisions?
-   ├── Any checkpoints pending?
-   └── What shipped overnight?
+$ claude
 
-2. Clear the queue
-   ├── Make decisions
-   ├── Approve checkpoints
-   └── Note anything to discuss later
+You: today
 
-3. Activate agents for the day
-   └── Start phases that are ready
+Chief of Staff: Good morning. Here's what needs your attention:
+
+**Blocking:**
+- Dashboard: Show revenue or signups first?
+
+**Checkpoints:**
+- Payment flow ready for security review
+
+**Since yesterday:**
+- User profiles shipped to production
+- Onboarding flow in QA
+
+What should we focus on?
+
+You: Revenue first on dashboard. And let's do the security review.
+
+Chief of Staff: Got it. Bringing in Security Engineer for payment flow.
 ```
 
 ### Throughout the Day
 
-```
-You do founder work:
-├── Talk to users
-├── Think about strategy
-├── Write code (if you want to)
-├── Handle business stuff
+You do founder work — talk to users, think about strategy, write code if you want. Agents work in the background.
 
-Occasionally:
-├── Check status
-├── Activate new phases
-└── Answer agent questions
-```
-
-### Evening (10 minutes)
+When you want to check in:
 
 ```
-1. Check _TODAY.md
-   ├── What completed today?
-   ├── What's blocked?
-   └── What's ready for tomorrow?
+You: status
 
-2. Clear any final decisions
-
-3. Done
+Chief of Staff:
+- Payment flow: Security review in progress (no issues so far)
+- Dashboard: Frontend building the revenue view
+- Onboarding: QA found 1 minor bug, being fixed
 ```
 
-**Total time managing agents: ~30-45 minutes**
+### Evening (2 minutes)
+
+```
+You: wrap
+
+Chief of Staff:
+
+Wrap Summary:
+- Committed: "feat(payments): add Stripe integration"
+- Security approved payment flow
+- Dashboard 80% complete
+
+Tomorrow: Ship payments, finish dashboard.
+```
+
+**Total time in Claude: ~15-20 minutes**
 
 ---
 
@@ -360,16 +371,29 @@ The starting directory is just where the conversation begins — not a boundary.
 Here's what operating well feels like:
 
 **Morning:**
-You open `_TODAY.md`. Three decisions. You make them in 5 minutes. A package is ready to ship — you approve. Done.
+```
+You: today
+Chief of Staff: Three decisions pending. One package ready to ship.
+You: [decide, decide, decide] Ship it.
+Chief of Staff: Done.
+```
+Five minutes. Done.
 
 **Midday:**
-You're on a call with a potential customer. Agents are building features in parallel. You're not worried about it.
+You're on a call with a potential customer. Agents are building features. You're not watching them.
 
 **Afternoon:**
-You check status. Two packages progressed. One hit a bug — QA found it, it's being fixed. You didn't have to do anything.
+```
+You: status
+Chief of Staff: Two packages progressed. One hit a bug — QA found it, being fixed.
+```
+You didn't have to do anything.
 
 **Evening:**
-You shipped a feature today. Another is ready for tomorrow. You worked on the product for 30 minutes. The rest was founder work.
+```
+You: wrap
+Chief of Staff: Shipped auth today. Dashboard ready for tomorrow.
+```
 
 **The feeling:**
 You have a team. They're competent. They work without you watching. You make decisions, not do tasks. You're building a company, not just writing code.
@@ -382,9 +406,9 @@ You have a team. They're competent. They work without you watching. You make dec
 
 | When | What | Time |
 |------|------|------|
-| Morning | Read `_TODAY.md`, clear decisions, activate agents | 15 min |
-| Day | Do founder work, check status occasionally | As needed |
-| Evening | Review progress, clear final decisions | 10 min |
+| Morning | Say `today`, clear decisions, activate agents | 5 min |
+| Day | Do founder work, say `status` occasionally | As needed |
+| Evening | Say `wrap`, review summary | 2 min |
 
 ### Weekly
 

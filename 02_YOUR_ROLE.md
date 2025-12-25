@@ -163,31 +163,79 @@ No hiring. No waiting. No turnover. Just building.
 
 ## A Typical Day
 
-Here's what your day might look like:
+Here's what your day looks like:
 
-**Morning (15 minutes):**
-- Open `_TODAY.md`
-- See: 2 decisions pending, 1 package ready to ship
-- Make decisions
-- Approve ship
+**Morning (5 minutes):**
+
+```
+$ claude
+
+You: today
+
+Chief of Staff: Good morning. Here's what needs your attention:
+
+**Blocking:**
+- Auth: JWT vs sessions? (Backend Engineer waiting)
+
+**Checkpoints:**
+- User profiles API ready for review
+
+**Since yesterday:**
+- Login UI completed
+- 3 tests added
+
+What should we focus on first?
+
+You: JWT for auth. And approve the profiles API.
+
+Chief of Staff: Done. Backend Engineer proceeding with JWT.
+Shall I bring in QA to test the profiles API?
+
+You: Yes.
+
+Chief of Staff: QA Engineer activated. I'll let you know when testing is complete.
+```
 
 **Midday:**
-- Agents are working on 3 packages
-- You're doing user interviews (founder work, not agent work)
 
-**Afternoon (1 hour):**
-- Builder mode: Write the complex matching algorithm
-- Document it so agents can build around it
+You're doing founder work — user interviews, thinking about strategy, business stuff. Agents are working. You're not watching them.
 
-**Evening (10 minutes):**
-- Check `_TODAY.md`
-- See what shipped, what's ready for tomorrow
-- Clear any new decisions
-- Done
+**Afternoon (as needed):**
 
-**Total time managing agents:** ~30 minutes
-**Packages progressed:** 3-4
-**Shipped:** 1
+```
+You: I want to write the matching algorithm myself. It's subtle.
+
+Chief of Staff: Makes sense. I'll document what you build so other agents
+can work around it. Let me know when you're done.
+
+[You write code]
+
+You: Done. It's in lib/matching.ts.
+
+Chief of Staff: Got it. I've noted the location for Backend Engineer.
+Anything else, or should we wrap for the day?
+```
+
+**Evening (2 minutes):**
+
+```
+You: wrap
+
+Chief of Staff:
+
+Wrap Summary:
+- Committed: abc123 "feat(auth): JWT authentication"
+- Profiles API in QA (2 minor issues found, being fixed)
+- Matching algorithm documented
+
+Tomorrow: QA should be done. Ready for security review.
+
+Good night.
+```
+
+**Total time in Claude:** ~15-20 minutes
+**Packages progressed:** 3
+**Decisions made:** 2
 
 ---
 

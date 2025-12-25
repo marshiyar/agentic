@@ -32,8 +32,8 @@ git init
 Copy the template files from Agentic to your project:
 
 ```bash
-mkdir docs
-cp ~/.agentic/templates/docs/* docs/
+cp ~/.agentic/templates/claude.md ./
+cp -r ~/.agentic/templates/docs ./
 ```
 
 (If you cloned agentic elsewhere, adjust the path.)
@@ -42,6 +42,7 @@ You now have:
 
 ```
 my-project/
+├── claude.md               # Connects project to Agentic framework
 └── docs/
     ├── _TODAY.md           # Your daily operations file
     ├── _AGENTS.md          # Agent coordination
@@ -53,9 +54,34 @@ my-project/
 
 ---
 
-## Step 3: Fill In Your Vision
+## Step 3: Fill In Project Context
 
-Open `docs/_VISION.md` and fill it in. This is the most important file — it tells agents what you're building.
+First, open `claude.md` and fill in the basics:
+
+```markdown
+# Dog Walker App
+
+This project uses [Agentic](https://github.com/jasonhoffman/agentic).
+
+## For Claude
+[keep as-is]
+
+## Project
+
+**What:** Mobile app connecting dog owners with local dog walkers
+
+**Stack:** React Native, Supabase, TypeScript
+
+**Repo:** https://github.com/you/dog-walker
+
+## Current Focus
+
+MVP: Basic booking flow between owners and walkers
+```
+
+This connects your project to the Agentic framework. When you run `claude` from this directory, it knows it's the Chief of Staff and where to find context.
+
+Then open `docs/_VISION.md` and fill it in. This is the detailed vision — it tells agents what you're building.
 
 You don't need to have everything figured out. Start with what you know:
 
@@ -172,6 +198,7 @@ After setup, your project looks like:
 
 ```
 my-project/
+├── claude.md               # Connects to Agentic framework
 ├── docs/
 │   ├── _TODAY.md           # Check this every morning
 │   ├── _AGENTS.md          # Agents update this
@@ -183,11 +210,21 @@ my-project/
 └── [your app code will go here]
 ```
 
-The `docs/` folder is your command center. Everything about the project is coordinated here.
+The `claude.md` file bootstraps every session. The `docs/` folder is your command center.
 
 ---
 
 ## The Templates Explained
+
+### claude.md
+
+The connector file. Contains:
+- Project name and one-liner
+- Pointer to ~/.agentic for Chief of Staff identity
+- Pointer to docs/ for project context
+- Current focus
+
+Claude Code reads this automatically when you start a session. It bootstraps the Chief of Staff with your project context.
 
 ### _TODAY.md
 
@@ -290,7 +327,7 @@ When you decide something, write it down. In `_ARCHITECTURE.md`, `_AGENTS.md`, w
 |------|-------------|
 | 1 | Create project directory |
 | 2 | Copy template files |
-| 3 | Fill in `_VISION.md` |
+| 3 | Fill in `claude.md` and `_VISION.md` |
 | 4 | Activate Product Manager |
 | 5 | Approve spec, start building |
 

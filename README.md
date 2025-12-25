@@ -24,7 +24,23 @@ I'm your Chief of Staff. I'll help you build your company with AI agents.
 What are you building?
 ```
 
-You describe your idea. The Chief of Staff helps you set up your project, define your vision, make technology choices. When it's time to build, they bring in specialists:
+```
+You: A mobile app for dog walkers
+
+Chief of Staff: Great. Let me set up your project.
+
+[creates ~/projects/dogwalker]
+[copies templates]
+
+Tell me more — who's the primary user, dog owners or walkers?
+
+[conversation continues, vision takes shape]
+
+Chief of Staff: Vision captured. Ready to start building.
+What should we tackle first?
+```
+
+When it's time to build, they bring in specialists:
 
 ```
 You: I need the user authentication built

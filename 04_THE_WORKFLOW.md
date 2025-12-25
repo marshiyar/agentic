@@ -9,7 +9,7 @@ How work flows from idea to shipped.
 Every feature follows a path:
 
 ```
-IDEA → SPEC → DESIGN → BUILD → TEST → SECURITY → SHIP
+IDEA → SPEC → DESIGN → BUILD → TEST → SECURITY → PERFORMANCE → SHIP
 ```
 
 Different agents own different phases. You checkpoint at key moments. The rest flows automatically.
@@ -36,6 +36,7 @@ Here's a simple example:
 | Frontend | Frontend Engineer | No — auto-proceed |
 | Test | QA Engineer | No — auto-proceed |
 | Security | Security Engineer | Yes — you approve |
+| Performance | Platform Engineer | No — auto-proceed |
 | Ship | Platform Engineer | Yes — you decide |
 
 **Success Criteria:**
@@ -196,7 +197,40 @@ The bug goes back to Backend Engineer to fix, then returns to QA.
 
 ---
 
-### Phase 7: Ship
+### Phase 7: Performance
+
+**Agent:** Platform Engineer
+
+**What happens:**
+- Load testing on critical paths
+- Identifies bottlenecks
+- Optimizes if needed (caching, queries, etc.)
+- Verifies acceptable response times
+
+**Your action:** None (auto-proceed) — unless major issues found.
+
+**Example output:**
+```markdown
+### Performance Review: Password Reset
+
+**Status:** Pass
+
+**Tested:**
+- Reset request: 45ms avg (target: <200ms) ✓
+- Email send: 1.2s avg (target: <5s) ✓
+- Reset completion: 120ms avg (target: <200ms) ✓
+
+**Load test:**
+- 100 concurrent requests: No degradation
+- Rate limiting kicks in correctly
+
+**Notes:**
+- Consider caching email templates (future optimization)
+```
+
+---
+
+### Phase 8: Ship
 
 **Agent:** Platform Engineer
 
@@ -253,6 +287,11 @@ The bug goes back to Backend Engineer to fix, then returns to QA.
 │         │                                                    │
 │         ▼                                                    │
 │  ┌─────────────┐                                             │
+│  │ PERFORMANCE │◄─── Platform Engineer                       │
+│  └──────┬──────┘                                             │
+│         │ auto-proceed (if pass)                             │
+│         ▼                                                    │
+│  ┌─────────────┐                                             │
 │  │    SHIP     │◄─── Platform Engineer                       │
 │  └──────┬──────┘                                             │
 │         │                                                    │
@@ -278,8 +317,10 @@ The bug goes back to Backend Engineer to fix, then returns to QA.
 - Backend → Frontend
 - Frontend → Test
 - Test → Security (if tests pass)
+- Security → Performance (if approved)
+- Performance → Ship (if pass)
 
-This means you're involved at 3 moments, not 7.
+This means you're involved at 3 moments, not 8.
 
 ---
 
@@ -362,6 +403,7 @@ You decide scope changes.
 | Frontend | Frontend Engineer | No |
 | Test | QA Engineer | Only if bugs |
 | Security | Security Engineer | **Yes** |
+| Performance | Platform Engineer | Only if issues |
 | Ship | Platform Engineer | **Yes** |
 
 **Your involvement:** 3 checkpoints.

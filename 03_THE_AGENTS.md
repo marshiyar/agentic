@@ -1,32 +1,53 @@
 # Chapter 3: The Agents
 
-Your team of 14 specialists.
+Your team: one Chief of Staff who becomes 14 specialists.
 
 ---
 
-## How Agents Work
+## The Chief of Staff
 
-Each agent is an AI (like Claude) given:
-
-1. **A role file** — Defines who they are, what they do, how they work
-2. **Your project's context** — Current status, priorities, conventions
-3. **A task** — What you need them to do right now
-
-To activate an agent, you tell Claude:
+When you type `claude`, you're talking to the Chief of Staff. They're your single point of contact.
 
 ```
-You are ~/projects/agentic/reference/roles/backend-engineer.md
+$ claude
 
-[Your task or context here]
+Chief of Staff: Welcome to Agentic. What are you building?
+
+You: A mobile app for dog walkers.
+
+Chief of Staff: Great. Let me set up your project...
+[creates ~/projects/dogwalker]
+[copies templates]
+
+Now let's define your vision. Who's the primary user — dog owners or walkers?
 ```
 
-The agent reads its role file, reads your project's `_AGENTS.md`, and starts working.
+The Chief of Staff:
+- **Greets you** and helps you get started
+- **Sets up projects** — creates repos, copies templates
+- **Becomes specialists** — shifts into Backend Engineer, QA, etc. as needed
+- **Coordinates** — handles handoffs between specialists
+- **Provides continuity** — maintains context across the whole conversation
+
+You never "activate" agents separately. You talk to the Chief of Staff, and they bring in specialists:
+
+```
+You: I need the user profiles API built.
+
+Chief of Staff: Let me bring in the Backend Engineer.
+
+Backend Engineer: I'll design the profiles schema and API...
+[works]
+Backend Engineer: Done. Ready for frontend.
+
+Chief of Staff: Should I bring in Frontend Engineer?
+```
 
 ---
 
-## The Full Team
+## The Specialists
 
-You have access to 14 specialized agents:
+The Chief of Staff can become any of these 14 specialists:
 
 ### Core Engineering (Use Most Often)
 
@@ -78,6 +99,8 @@ For most projects, your core team is:
 │                     YOUR DAILY TEAM                      │
 ├─────────────────────────────────────────────────────────┤
 │                                                          │
+│   Chief of Staff      → Your main contact (always)       │
+│                          ↓                               │
 │   Product Manager     → Specs and priorities             │
 │   Backend Engineer    → Server and database              │
 │   Frontend Engineer   → User interface                   │
@@ -88,7 +111,7 @@ For most projects, your core team is:
 └─────────────────────────────────────────────────────────┘
 ```
 
-The others are on-demand — activate when you need that expertise.
+The others are on-demand — Chief of Staff brings them in when you need that expertise.
 
 ---
 
@@ -214,38 +237,35 @@ The others are on-demand — activate when you need that expertise.
 
 ---
 
-## Activating Agents
+## Working With Specialists
 
-To work with an agent, start a Claude session and say:
+You don't activate agents directly. You tell the Chief of Staff what you need:
 
 ```
-You are ~/projects/agentic/reference/roles/[role-name].md
+You: I need help speccing out a password reset feature.
 
-Read my project at [your-project-path] and [what you need].
+Chief of Staff: Let me bring in the Product Manager.
+
+Product Manager: For password reset, let's think through the flow...
 ```
 
-Examples:
-
-**Starting a new feature:**
 ```
-You are ~/projects/agentic/reference/roles/product-manager.md
+You: Build the user profile API.
 
-Help me spec out a password reset feature for my app.
-```
+Chief of Staff: Bringing in Backend Engineer.
 
-**Building an API:**
-```
-You are ~/projects/agentic/reference/roles/backend-engineer.md
-
-Read docs/_AGENTS.md and implement the user profile API.
+Backend Engineer: I'll design the schema and endpoints...
 ```
 
-**Testing before ship:**
 ```
-You are ~/projects/agentic/reference/roles/qa-engineer.md
+You: Test the notifications feature before we ship.
 
-Test the notifications feature and report any issues.
+Chief of Staff: Bringing in QA Engineer.
+
+QA Engineer: Testing notifications now...
 ```
+
+The Chief of Staff knows which specialist to bring in based on what you ask for.
 
 ---
 
@@ -290,6 +310,10 @@ You don't need to read them all now. Reference them when you want to understand 
 
 ## Summary
 
+**Entry point:** Chief of Staff (always)
+
+**Specialists:** 14, brought in as needed by Chief of Staff
+
 | Agent Type | Who | When |
 |------------|-----|------|
 | **Core Engineering** | Frontend, Backend, Platform, QA, Security | Every project, most days |
@@ -298,9 +322,11 @@ You don't need to read them all now. Reference them when you want to understand 
 | **Content & Support** | Tech Writer, Customer Success | When documenting or researching |
 | **Operations** | Project Manager, Ops Manager | When organizing |
 
-**Most common flow:**
+**Typical flow:**
 ```
-Product Manager → UX Designer → Backend Engineer → Frontend Engineer → QA → Security → Platform
+Chief of Staff → Product Manager → Backend → Frontend → QA → Security → Ship
+         ↑                                                              |
+         └──────────────────────────────────────────────────────────────┘
 ```
 
 ---

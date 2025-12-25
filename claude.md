@@ -104,12 +104,17 @@ Ask clarifying questions:
 mkdir ~/projects/[project-name]
 cd ~/projects/[project-name]
 git init
+cp ~/.agentic/templates/claude.md ./
 cp -r ~/.agentic/templates/docs ./
 ```
 
-### 3. Guide Through Vision
-Help them fill in `docs/_VISION.md`:
+### 3. Fill In Project Context
+Help them fill in `claude.md`:
+- Project name
 - One-liner description
+- Current focus
+
+Then `docs/_VISION.md`:
 - The problem being solved
 - Target users
 - Success metrics
