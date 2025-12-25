@@ -2,54 +2,151 @@
 
 A framework for running AI agent teams on software projects.
 
+---
+
 ## Quick Start
 
-1. Copy `templates/_AGENTS.md` to your project's `docs/`
-2. Start Claude with: `You are [path/to/role.md]`
+### New Project
+```bash
+mkdir my-project && cd my-project
+mkdir docs
+cp ~/projects/agentic/templates/*.md docs/
+```
+
+Then:
+1. Edit `docs/_VISION.md` with your idea
+2. Activate Product Manager to refine and plan
+3. Start building
+
+→ [Full Guide: New Project](docs/guides/new-project.md)
+
+### Existing Project
+```bash
+cd your-project
+mkdir -p docs
+cp ~/projects/agentic/templates/*.md docs/
+```
+
+Then document your current state and start using agents.
+
+→ [Full Guide: Existing Project](docs/guides/existing-project.md)
+
+---
+
+## Guides
+
+| Guide | Description |
+|-------|-------------|
+| [Getting Started](docs/guides/getting-started.md) | Framework overview |
+| [New Project](docs/guides/new-project.md) | Starting from scratch |
+| [Existing Project](docs/guides/existing-project.md) | Adopting for existing code |
+| [Feature Lifecycle](docs/guides/workflows/feature-lifecycle.md) | Idea → Shipped |
+
+---
 
 ## Roles
 
 ### Engineering (Always-On)
-- [docs/roles/frontend-engineer.md](docs/roles/frontend-engineer.md)
-- [docs/roles/backend-engineer.md](docs/roles/backend-engineer.md)
-- [docs/roles/platform-engineer.md](docs/roles/platform-engineer.md)
-- [docs/roles/qa-engineer.md](docs/roles/qa-engineer.md)
-- [docs/roles/security-engineer.md](docs/roles/security-engineer.md)
+| Role | Thinking Mode |
+|------|---------------|
+| [Frontend Engineer](docs/roles/frontend-engineer.md) | Implementation |
+| [Backend Engineer](docs/roles/backend-engineer.md) | Implementation |
+| [Platform Engineer](docs/roles/platform-engineer.md) | Implementation + Optimization |
+| [QA Engineer](docs/roles/qa-engineer.md) | Verification |
+| [Security Engineer](docs/roles/security-engineer.md) | Verification |
 
 ### Product & Design (On-Demand)
-- [docs/roles/product-manager.md](docs/roles/product-manager.md)
-- [docs/roles/ux-designer.md](docs/roles/ux-designer.md)
-- [docs/roles/ui-designer.md](docs/roles/ui-designer.md)
+| Role | Thinking Mode |
+|------|---------------|
+| [Product Manager](docs/roles/product-manager.md) | Verification + Implementation |
+| [UX Designer](docs/roles/ux-designer.md) | Verification + Implementation |
+| [UI Designer](docs/roles/ui-designer.md) | Implementation + Optimization |
 
 ### Data & Growth (On-Demand)
-- [docs/roles/data-analyst.md](docs/roles/data-analyst.md)
-- [docs/roles/growth-engineer.md](docs/roles/growth-engineer.md)
+| Role | Thinking Mode |
+|------|---------------|
+| [Data Analyst](docs/roles/data-analyst.md) | Optimization |
+| [Growth Engineer](docs/roles/growth-engineer.md) | Implementation + Optimization |
 
 ### Content & Support (On-Demand)
-- [docs/roles/technical-writer.md](docs/roles/technical-writer.md)
-- [docs/roles/customer-success.md](docs/roles/customer-success.md)
+| Role | Thinking Mode |
+|------|---------------|
+| [Technical Writer](docs/roles/technical-writer.md) | Optimization |
+| [Customer Success](docs/roles/customer-success.md) | Verification |
 
 ### Operations (On-Demand)
-- [docs/roles/project-manager.md](docs/roles/project-manager.md)
-- [docs/roles/operations-manager.md](docs/roles/operations-manager.md)
+| Role | Thinking Mode |
+|------|---------------|
+| [Project Manager](docs/roles/project-manager.md) | Verification + Optimization |
+| [Operations Manager](docs/roles/operations-manager.md) | Optimization |
+
+---
 
 ## Concepts
 
-- [docs/concepts/thinking-modes.md](docs/concepts/thinking-modes.md) — Implementation vs Verification vs Optimization
-- [docs/concepts/orchestration.md](docs/concepts/orchestration.md) — Human as conductor
-- [docs/concepts/communication.md](docs/concepts/communication.md) — Shared state, handoffs, notes
+| Concept | Description |
+|---------|-------------|
+| [Thinking Modes](docs/concepts/thinking-modes.md) | Implementation vs Verification vs Optimization |
+| [Orchestration](docs/concepts/orchestration.md) | Human as conductor |
+| [Communication](docs/concepts/communication.md) | Shared state via _AGENTS.md |
+| [Decisions](docs/concepts/decisions.md) | What humans decide vs what agents decide |
+
+---
 
 ## Templates
 
-- [templates/_AGENTS.md](templates/_AGENTS.md) — Copy to your project's `docs/`
+Copy these to your project's `docs/` folder:
+
+| Template | Purpose |
+|----------|---------|
+| [_VISION.md](templates/_VISION.md) | What you're building and why |
+| [_ROADMAP.md](templates/_ROADMAP.md) | Phases, milestones, priorities |
+| [_AGENTS.md](templates/_AGENTS.md) | Agent coordination |
+| [_ARCHITECTURE.md](templates/_ARCHITECTURE.md) | Technical decisions |
+| [_CONVENTIONS.md](templates/_CONVENTIONS.md) | Coding standards |
+
+---
 
 ## The Human Role
 
 You are CEO/CTO/Head of Product. You:
-- Set vision and priorities
-- Make architecture decisions
-- Write code alongside agents
-- Orchestrate agent handoffs
-- Approve major changes
 
-Agents execute, propose, and report. You decide.
+| Responsibility | Examples |
+|----------------|----------|
+| **Vision** | What to build, why it matters |
+| **Strategy** | Priorities, resource allocation |
+| **Judgment** | Trade-offs, risk tolerance |
+| **Decisions** | Approve scope, ship/no-ship |
+| **Code** | Build alongside agents (optional) |
+
+Agents execute, propose, and surface decisions. You decide.
+
+→ [More: Decisions Framework](docs/concepts/decisions.md)
+
+---
+
+## Activating an Agent
+
+```
+You are ~/projects/agentic/docs/roles/[role].md
+
+[Optional: Current task or context]
+```
+
+The agent reads its role file → reads your project's `docs/_AGENTS.md` → starts working.
+
+---
+
+## Project Structure
+
+```
+your-project/
+└── docs/
+    ├── _AGENTS.md        # Agent coordination
+    ├── _VISION.md        # What we're building
+    ├── _ROADMAP.md       # Phases and priorities
+    ├── _ARCHITECTURE.md  # Technical decisions
+    └── _CONVENTIONS.md   # Coding standards
+```
+
+Agents read and update these files. You orchestrate.
