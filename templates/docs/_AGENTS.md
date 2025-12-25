@@ -1,31 +1,33 @@
 # Agents
 
-Coordination file for parallel work. Agents read this to know what others are doing.
+Source of truth for "where are we?" Agents read this at session start. Update it when finishing work.
 
 ---
 
 ## Active
 
-| Terminal | Role | Working On | Status |
-|----------|------|------------|--------|
-| — | — | — | — |
-
-*Update when starting/finishing work*
+| Role | Working On | Status |
+|------|------------|--------|
+| — | — | — |
 
 ---
 
 ## Handoffs
 
-### [Date] — [From Role] → [To Role]
+Capture what was done **and why**. So the next agent (or you, an hour later) has context.
 
-**What's done:**
-- Item 1
-- Item 2
+### [Date] — [Role]
 
-**For next agent:**
-- Where to start
+**Done:**
+- [What was completed]
+
+**Why it's built this way:**
+- [Key decisions and reasoning]
+- [Tradeoffs made]
+
+**For next:**
+- [What to pick up]
 - Key files: `path/to/file.ts`
-- Gotchas or notes
 
 ---
 
@@ -47,14 +49,12 @@ Coordination file for parallel work. Agents read this to know what others are do
 
 ## Standing Decisions
 
-*Decisions already made that agents should follow*
+Decisions already made. Agents should follow these.
 
-- **Auth:** [approach]
-- **Database:** [choice]
-- **Styling:** [approach]
+- **[Category]:** [Decision and why]
 
 ---
 
 ## Notes
 
-*Anything agents should know that doesn't fit above*
+Anything else agents should know.

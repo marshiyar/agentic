@@ -1,38 +1,41 @@
 # Agentic
 
-A framework for working with AI agents like a team.
+A framework for working with AI agents in parallel.
 
 ---
 
-## The Reality
+## The Problem
 
-You're at your desk. You ask Claude to build an API. It starts working.
+You ask Claude to build something. It takes 20 minutes. You wait.
 
-Now you're waiting.
-
-So you open another terminal. Ask it to work on the frontend. Now two things are moving.
-
-You open a third terminal and start a product conversation. Now *you're* working too.
-
-**The goal: the human is always doing something productive.**
+That's 20 minutes you could spend on something else.
 
 ---
 
-## What This Is
+## The Solution
 
-This repo gives Claude context about how to work like a team:
+Open multiple terminals. Give each one a clear role.
 
-- **Roles** — Backend Engineer, Frontend Engineer, Product Manager, QA, etc.
-- **Coordination** — Shared docs so parallel work doesn't conflict
-- **Handoffs** — Explicit notes when one role finishes and another starts
-- **Simple commands** — `wrap` closes out work cleanly, `status` shows state
+```
+Terminal 1: Backend building the profiles API
+Terminal 2: Tests running across the stack
+Terminal 3: Documentation being updated
+Terminal 4: You finding UI bugs with QA
+```
 
-The roles map to a real company's org chart. But unlike a real company:
+Now you're filling lag time instead of waiting. When you switch between terminals, the roles help you orient instantly.
 
-- Any role can do anything (it's all Claude)
-- You can run 10 of the same role in parallel
-- Coordination happens through docs, not meetings
-- Handoffs happen through files, not conversations
+---
+
+## What This Repo Provides
+
+**Roles** — Backend Engineer, Frontend Engineer, QA, etc. Each terminal has a clear identity. You know what it's doing when you glance at it.
+
+**Coordination files** — `_AGENTS.md` shows who's doing what. When you (or an agent) need to know the state, it's there.
+
+**Handoffs** — When one role finishes, it writes notes for the next. Captures what was done and why.
+
+**Simple commands** — `wrap` closes out work cleanly. `status` shows current state. `today` shows what needs attention.
 
 ---
 
@@ -44,29 +47,80 @@ cd ~/.agentic
 claude
 ```
 
-Say "hi" or "what are you building?" — it picks up from there.
+Say "hi" or describe what you're building.
 
 ---
 
-## Parallel Work
+## How It Works
 
-The multiplier isn't speed — it's concurrency.
-
+**Single terminal:**
 ```
-Terminal 1              Terminal 2              Terminal 3
-─────────────────────   ─────────────────────   ─────────────────────
-cd ~/project            cd ~/project            cd ~/project
-claude                  claude                  claude
+You: Build the user profiles feature
 
-"You're Backend.        "You're Frontend.       "You're QA. Test
-Build profiles API."    Build profile screen."  the auth flow."
+Chief of Staff: Let me bring in Backend for the API.
 
-[works]                 [works]                 [works]
+[works as Backend]
+
+Done. Frontend next?
 ```
 
-Each terminal works independently. They coordinate through `docs/_AGENTS.md` — who's doing what, what's done, what's next.
+**Multiple terminals:**
+```
+Terminal 1                    Terminal 2
+─────────────────────────     ─────────────────────────
+"You're Backend.              "You're Frontend.
+Build the profiles API."      Build the profile screen."
 
-Without this coordination, parallel work stomps on itself. With it, you get clean handoffs and no conflicts.
+[works for 30 min]            [works for 20 min]
+```
+
+Each terminal works independently. They coordinate through `_AGENTS.md` — who's doing what, what's done, what's blocked.
+
+---
+
+## Why Roles Matter
+
+When you have 5 terminals open, each needs a clear identity.
+
+You glance at Terminal 3: "That's QA running tests."
+You glance at Terminal 1: "That's Backend on profiles."
+
+The role isn't a capability limit — Backend can write frontend code if needed. It's a **focus context** that makes switching clean.
+
+---
+
+## Why `_AGENTS.md` Matters
+
+It's the source of truth for "where are we?"
+
+When you switch to a terminal after an hour, you need to orient. When an agent starts a session, it needs to know the state.
+
+`_AGENTS.md` answers:
+- Who's working on what right now
+- What's done
+- What's blocked
+- Handoff notes with context
+
+---
+
+## Why Handoffs Capture "Why"
+
+Not just "Profiles API done."
+
+But: "Profiles API done. Used soft deletes because we need to restore accounts. Rate limited to 100/min based on expected traffic. Types in `lib/types.ts`."
+
+So when you (or the next agent) pick up, you have context, not just facts.
+
+---
+
+## The Commands
+
+| Say | Get |
+|-----|-----|
+| `hi` / `morning` | Pick up where you left off |
+| `status` | Current state across all work |
+| `today` | What needs attention |
+| `wrap` | Close out — document, commit, clean up |
 
 ---
 
@@ -74,63 +128,17 @@ Without this coordination, parallel work stomps on itself. With it, you get clea
 
 | Role | Focus |
 |------|-------|
-| **Chief of Staff** | Orchestration, project setup, context |
-| **Product Manager** | Specs, priorities, user stories |
+| **Chief of Staff** | Orchestration, orientation, shifting between roles |
+| **Product Manager** | Specs, priorities, scope |
 | **UX Designer** | User flows, wireframes |
 | **UI Designer** | Visual design, styling |
 | **Backend Engineer** | APIs, database, server logic |
 | **Frontend Engineer** | UI, screens, components |
-| **QA Engineer** | Testing, quality |
-| **Security Engineer** | Security review |
-| **Platform Engineer** | Deploy, CI/CD, infra |
-| **Data Analyst** | Metrics, analytics |
-| **Growth Engineer** | Experiments, optimization |
-| **Technical Writer** | Documentation |
-| **Customer Success** | User feedback |
-| **Project Manager** | Status, coordination |
-| **Operations Manager** | Process optimization |
+| **QA Engineer** | Testing, quality, edge cases |
+| **Security Engineer** | Auth, vulnerabilities, review |
+| **Platform Engineer** | Deploy, CI/CD, infrastructure |
 
-These are focus areas, not capability limits. Backend can write frontend code. The structure exists for coordination, not gatekeeping.
-
----
-
-## Commands
-
-| Say | Get |
-|-----|-----|
-| `hi` / `morning` | Status check, pick up where you left off |
-| `status` | Current state of everything |
-| `today` | What needs attention |
-| `wrap` | Close out work — document, commit, clean up |
-
-Everything else is conversation.
-
----
-
-## What Gets Handled Automatically
-
-The mundane stuff people skip when moving fast:
-
-- Update status docs → agents do it
-- Write handoff notes → `wrap` does it
-- Commit with good messages → `wrap` does it
-- Clean up stale items → `wrap` does it
-- Verify "done" means done → `wrap` does it
-
-You say `wrap`, the hygiene happens.
-
----
-
-## What You're Learning
-
-Even as a solo founder, you're learning to run a team:
-
-- **Delegation** — Clear scope for each terminal
-- **Documentation** — So parallel work doesn't conflict
-- **Handoffs** — Explicit "done, here's what you need to know"
-- **Professional workflow** — The stuff real teams do
-
-When you hire, you already know how to work this way.
+Plus: Data Analyst, Growth Engineer, Technical Writer, Customer Success, Project Manager, Operations Manager.
 
 ---
 
@@ -138,7 +146,7 @@ When you hire, you already know how to work this way.
 
 | Doc | What |
 |-----|------|
-| [AGENTS.md](AGENTS.md) | The roles |
+| [AGENTS.md](AGENTS.md) | The roles and how they work |
 | [TECH_STACK.md](TECH_STACK.md) | Default tech choices |
 | [reference/](reference/) | Deep dives |
 

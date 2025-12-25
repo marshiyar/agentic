@@ -1,120 +1,84 @@
 # How It Works
 
-The practical mechanics.
+Filling lag time. Staying oriented. Capturing context.
 
 ---
 
 ## The Basic Loop
 
-You're at your desk. You open a terminal and ask Claude to do something. It starts working.
+You ask Claude to build something. It works for 20 minutes.
 
-Now you're waiting.
-
-So you open another terminal. Start something else. Now two things are moving.
-
-You open a third terminal and have a conversation — product planning, reviewing specs, whatever. Now you're working too.
-
-**The goal: always be doing something productive while agents work.**
-
----
-
-## Why Roles Exist
-
-Roles give Claude a focus lens:
-
-- "You're Backend" → thinking about APIs, database, server patterns
-- "You're Frontend" → thinking about components, state, user flows
-- "You're QA" → thinking about edge cases, test coverage, breaking things
-
-Same AI, different hat. The structure exists for two reasons:
-
-1. **Focus** — Clearer thinking within a domain
-2. **Coordination** — Parallel work that doesn't conflict
-
----
-
-## Parallelism
-
-The multiplier isn't speed. It's concurrency.
+You could wait. Or you could open another terminal and do something else.
 
 ```
-Traditional:
-  1 person → 1 task → waiting → next task
-
-Agentic:
-  Terminal 1 → Backend building API
-  Terminal 2 → Frontend building screen
-  Terminal 3 → You discussing product
-
-  All happening simultaneously.
+Terminal 1: Backend building the profiles API (takes 30 min)
+Terminal 2: Tests running across the stack (takes 15 min)
+Terminal 3: You reviewing the auth spec with Product Manager
+Terminal 4: Documentation being updated
 ```
 
-To make this work, parallel sessions need to know about each other. That's what `_AGENTS.md` is for.
+Now you're productive during the lag. When something finishes, you check in, give direction, move on.
 
 ---
 
-## Coordination Through Files
+## Why Roles
 
-Agents don't talk to each other. They read and write files.
+Each terminal needs a clear identity.
 
-| File | Purpose |
-|------|---------|
-| `_AGENTS.md` | Who's doing what, handoffs, blockers |
-| `_TODAY.md` | What needs attention today |
+When you glance at Terminal 2, you should instantly know: "That's QA running tests." When you switch to Terminal 1 after an hour, you should know: "That's Backend on profiles."
 
-When Backend finishes:
-1. Updates `_AGENTS.md` — "Profiles API done, ready for frontend"
-2. Writes handoff note — "Endpoints: GET/POST /api/profiles, types in lib/types.ts"
-
-When Frontend starts:
-1. Reads `_AGENTS.md` — sees the handoff
-2. Knows exactly where to start
-
-No meetings. No Slack. Just files.
+Roles make context-switching clean. They're not capability limits — Backend can write frontend code if needed. They're **focus contexts** that help you and the agents stay oriented.
 
 ---
 
-## The `wrap` Command
+## Why `_AGENTS.md`
 
-The mundane stuff people skip:
+It's the source of truth for "where are we?"
 
-- Update status docs
-- Write handoff notes
-- Commit with good message
-- Clean up stale items
-- Verify done means done
+When you come back to a terminal, you need to orient. When an agent starts a new session, it needs to know what's happening.
 
-You say `wrap`, all of this happens. One word, hygiene complete.
+`_AGENTS.md` answers:
+- Who's working on what
+- What's done
+- What's blocked
+- Handoff notes from completed work
 
----
-
-## What You Decide vs What Agents Decide
-
-**You decide:**
-- What to build
-- What's in scope
-- When to ship
-- Acceptable risk
-
-**Agents decide:**
-- How to implement
-- Code structure
-- Library choices
-- Test approach
-
-You own the *what*. They figure out the *how*.
+Every agent reads it at the start. Every agent updates it when finishing.
 
 ---
 
-## Checkpoints
+## Why Handoffs Capture "Why"
 
-You're not involved in every step. Just key moments:
+Not just what was done — why it was done that way.
 
-1. **Approve scope** — Before significant work starts
-2. **Approve security** — Before shipping auth or sensitive features
-3. **Approve ship** — When it goes live
+**Weak handoff:**
+```
+Profiles API complete.
+```
 
-Everything else flows without you.
+**Strong handoff:**
+```
+Profiles API complete.
+- Used soft deletes because we need account restoration
+- Rate limited to 100/min based on expected traffic
+- Types in lib/types.ts, tests in __tests__/api/profiles.test.ts
+```
+
+When you pick up after an hour, or Frontend starts building against the API, the reasoning is there. No reverse-engineering context.
+
+---
+
+## The Commands
+
+**`status`** — Where everything stands right now.
+
+**`today`** — What needs your attention today.
+
+**`wrap`** — Close out the current work:
+1. Update `_AGENTS.md` with what's done
+2. Write handoff notes (what and why)
+3. Commit with a clear message
+4. Report what shipped
 
 ---
 
@@ -123,24 +87,52 @@ Everything else flows without you.
 **Single terminal:**
 - Chief of Staff shifts between roles
 - Sequential work
-- You follow along
+- You follow along in one conversation
 
 **Multiple terminals:**
 - Each has a dedicated role
 - Parallel work
-- You orchestrate between them
+- You switch between them as things complete
 
-Start with single. Add terminals when you have independent work that can happen in parallel.
+Start with one. Add more when you have independent work and you're waiting.
 
 ---
 
-## The Learning
+## What You Decide vs What Agents Decide
 
-Even as a solo founder, you're practicing team skills:
+**You:**
+- What to build
+- Priorities
+- When to ship
+- Major design decisions
 
-- **Delegation** — Clear scope for each terminal
-- **Documentation** — So parallel work doesn't conflict
-- **Handoffs** — Explicit "done, here's what you need"
-- **Process** — The hygiene real teams need
+**Agents:**
+- Implementation details
+- Code structure
+- Library choices
+- Test approach
 
-When you hire, you already know how to work this way.
+You own direction. They figure out execution. You check in, review, course-correct.
+
+---
+
+## The Coordination Files
+
+| File | Purpose |
+|------|---------|
+| `_AGENTS.md` | Who's doing what, handoffs, state |
+| `_TODAY.md` | What needs attention today |
+| `_VISION.md` | What we're building (stable) |
+| `_ROADMAP.md` | Priorities (changes occasionally) |
+
+Agents read these at the start of each session. They update `_AGENTS.md` and `_TODAY.md` as they work.
+
+---
+
+## The Result
+
+You're running 4 terminals. One's been building for an hour. One just finished tests. One's updating docs. You're in the fourth discussing the next feature.
+
+Each terminal has a clear role. `_AGENTS.md` shows the state. Handoffs explain the reasoning.
+
+You switch focus as things complete, always productive, always oriented.

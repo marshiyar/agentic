@@ -1,18 +1,20 @@
-# The Roles
+# Roles
 
-These are focus areas, not capability limits.
+Roles help you context-switch cleanly.
 
-Any role can do anything — it's all Claude. The structure exists for coordination: clear scope, clean handoffs, parallel work that doesn't conflict.
+When you have 5 terminals open, you need to glance at one and know: "That's Backend on the profiles API." The role gives each terminal a clear identity.
 
 ---
 
 ## How Roles Work
 
-When you open a terminal and say "You're Backend Engineer, build the profiles API" — you're giving Claude a focus lens. It thinks about APIs, database schema, server patterns.
+You open a terminal and say: "You're Backend Engineer. Build the profiles API."
 
-Another terminal with "You're Frontend Engineer, build the profile screen" — same Claude, different focus. Thinking about components, state, user interaction.
+Now that terminal has a focus. It thinks about APIs, database schema, server patterns. When you come back after an hour, you know exactly what it was doing.
 
-They're not different AIs. They're the same AI wearing different hats.
+Another terminal: "You're QA. Run the test suite and report failures."
+
+Different focus. Same Claude. The role is a **context lens**, not a capability limit.
 
 ---
 
@@ -61,19 +63,17 @@ They're not different AIs. They're the same AI wearing different hats.
 
 ## Chief of Staff
 
-The default role when you just say "hi".
+The default when you just say "hi" without specifying a role.
 
-Reads project context, knows where things stand, can shift into any specialist. Orchestrates handoffs, suggests what to work on next.
-
-When you need specialist work, it either:
+Reads project context, knows where things stand, can shift into any specialist. When you need focused work, it either:
 - **Shifts** — Becomes that specialist in the same terminal
-- **Delegates** — You open another terminal with that specialist
+- **Delegates** — You open another terminal with that role
 
 ---
 
-## Parallel Roles
+## Multiple Terminals, Same Role
 
-You can have multiple instances of the same role:
+You can have three Backend Engineers:
 
 ```
 Terminal 1: "You're Backend. Build the profiles API."
@@ -81,22 +81,38 @@ Terminal 2: "You're Backend. Build the payments API."
 Terminal 3: "You're Backend. Build the notifications API."
 ```
 
-Three backend engineers, working in parallel. Each on isolated scope. Coordinating through `_AGENTS.md`.
-
-This is the multiplier — not that one AI is faster, but that you can run many in parallel.
+Three independent workstreams. Each knows its scope. They coordinate through `_AGENTS.md`.
 
 ---
 
 ## Coordination
 
-The roles coordinate through shared files:
+Terminals don't talk to each other. They read and write files.
 
 | File | Purpose |
 |------|---------|
-| `docs/_AGENTS.md` | Who's doing what, handoffs, status |
+| `docs/_AGENTS.md` | Who's doing what, handoffs, blockers |
 | `docs/_TODAY.md` | What needs attention today |
 
-When Backend finishes the API, it writes a handoff note. When Frontend starts, it reads the note. No meetings, no Slack — just files.
+When Backend finishes the API:
+1. Updates `_AGENTS.md` — "Profiles API done"
+2. Writes handoff — "Endpoints: GET/POST /api/profiles. Used soft deletes because... Types in lib/types.ts"
+
+When Frontend starts:
+1. Reads `_AGENTS.md`
+2. Has context, knows where to begin
+
+---
+
+## Why "Why" Matters
+
+Handoffs should capture reasoning, not just facts.
+
+**Weak:** "Added rate limiting."
+
+**Strong:** "Added rate limiting at 100/min. Based on expected 50 users, 2 requests each. Can increase if needed."
+
+When you come back after an hour, or the next agent picks up, the reasoning is there.
 
 ---
 
@@ -105,8 +121,8 @@ When Backend finishes the API, it writes a handoff note. When Frontend starts, i
 Each role has a detailed file in `reference/roles/`:
 
 - What they focus on
-- How they work
-- What files they typically touch
+- How they typically work
+- What files they touch
 - When to escalate
 
-These are reference material. Claude reads them when shifting into a role.
+Claude reads these when shifting into a role.
