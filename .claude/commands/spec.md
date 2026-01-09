@@ -1,3 +1,8 @@
+---
+description: Create feature spec with task breakdown and dependencies for parallel work
+argument-hint: <feature-name>
+---
+
 # /spec — Feature Specification
 
 Create a structured spec that enables parallel work.

@@ -1,3 +1,7 @@
+---
+description: Closure protocol — update docs, review, commit, report what shipped
+---
+
 # /wrap — Closure Protocol
 
 End-of-session workflow. Ensures consistent handoffs and documentation.

@@ -1,3 +1,7 @@
+---
+description: Check danger zones before touching risky code — read _FRAGILE.md and warn
+---
+
 # /fragile — Danger Zone Check
 
 Safety check before touching risky code. Prevents disasters.

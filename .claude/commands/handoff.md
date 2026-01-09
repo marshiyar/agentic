@@ -1,3 +1,8 @@
+---
+description: Structured handoff to another role — document what, why, and next steps
+argument-hint: <role>
+---
+
 # /handoff — Structured Handoff
 
 Create a clear handoff to another role. Ensures context isn't lost between agents.

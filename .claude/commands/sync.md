@@ -1,3 +1,7 @@
+---
+description: Full context recovery — read all coordination files after a break
+---
+
 # /sync — Context Synchronization
 
 Full context recovery after a break or context switch. More thorough than /sup.

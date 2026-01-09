@@ -1,3 +1,7 @@
+---
+description: Quick 5-second status — active work, blockers, suggested next step
+---
+
 # /sup — Quick Status
 
 Fast context recovery. Get up to speed in 5 seconds.
