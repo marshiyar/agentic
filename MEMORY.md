@@ -63,6 +63,10 @@ Priority order when making tradeoffs:
 - Long operations need loading states that survive re-renders
 - Check for race conditions in async code
 - Don't hold transactions open across async boundaries
+- useEffect cleanup: use `let cancelled = false`, check before setState
+- Fire-and-forget `.then()` chains need `.catch()` — silent failures are bugs
+- Long/streaming fetches need AbortController — cleanup on unmount
+- Multiple async ops updating state: use Promise.all for atomic updates
 
 ---
 
@@ -106,8 +110,10 @@ Priority order when making tradeoffs:
 
 - Use query key factories, not string literals — `queryKeys.user.profile(id)` not `['user-profile', id]`
 - Invalidate specific keys, not broad prefixes — over-invalidation causes unnecessary refetches
+- Invalidation keys must exactly match query keys — mismatches cause stale data
 - Set explicit staleTime for data that shouldn't refetch on every render
 - Invalidate related queries on org/context switches to prevent stale data
+- Optimistic updates require full pattern: onMutate (cancel queries + store previous), onError (rollback)
 
 ---
 
@@ -140,6 +146,13 @@ Priority order when making tradeoffs:
 - Deep nesting (>3-4 levels) signals need for extraction
 - Comments explain WHY, not WHAT
 - Don't add comments to code you didn't write
+
+## Code Organization
+
+- Types belong in lib/types.ts, not in components — hooks should never import from components
+- Files imported 50+ times need comprehensive tests — changes cascade widely
+- One concern per file — don't mix unrelated logic
+- Barrel exports (index.ts) for clean imports, but don't re-export everything
 
 ---
 
@@ -196,6 +209,11 @@ Stop and reconsider if you see:
 - `process.env.EXPO_PUBLIC_*` in runtime code
 - Over-broad query invalidation
 - RLS policies querying other RLS-protected tables
+- `.then()` without `.catch()` — silent failures
+- Optimistic updates without onError rollback
+- Query invalidation keys that don't match query keys
+- useEffect with async but no cleanup function
+- Hooks importing types from components
 
 ---
 
