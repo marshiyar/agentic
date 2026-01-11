@@ -38,6 +38,13 @@ git clone https://github.com/jasonhoffman/agentic ~/.agentic
 ```
 /memory add
 [paste the standards from MEMORY.md]
+
+```
+or 
+
+```
+cp MEMORY.md ~/.claude/CLAUDE.me
+
 ```
 
 **2. For new projects** — Copy `templates/CLAUDE.md` and `templates/_FRAGILE.md` to your project.
