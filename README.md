@@ -193,6 +193,13 @@ For apps with projections, scenarios, verified claims:
 - All formatters in `lib/constants/units.ts`
 - Components never import Supabase directly
 
+**Supabase SDK only**
+- Always use Supabase SDK (@supabase/supabase-js)
+- Never write direct SQL queries in code
+- Use `.from()`, `.select()`, `.insert()`, `.update()`, `.delete()`
+- Complex queries: use Supabase RPC functions
+- Direct SQL only for: migrations, RLS policies, database functions
+
 **Data flow**
 ```
 Database → lib/supabase/queries → lib/models → lib/hooks → Components

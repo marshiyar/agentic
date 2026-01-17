@@ -32,6 +32,14 @@
 
 ## Supabase & RLS
 
+**ALWAYS use the Supabase SDK (@supabase/supabase-js)**
+- Never write direct database queries or custom database connections
+- Use `.from()`, `.select()`, `.insert()`, `.update()`, `.delete()` from the SDK
+- For complex queries, use Supabase RPC functions (call via `.rpc()`)
+- Direct SQL is ONLY for: migrations, RLS policies, database functions (in Supabase dashboard)
+- Import from `lib/supabase/client.ts`, never create multiple clients
+
+**RLS & Data Access**
 - RLS policies must never query other RLS-protected tables — use SECURITY DEFINER helpers
 - Test RLS as: owner, member, visitor, unauthenticated
 - Nested selects (`select('*, relation(*)')`) return different shapes — validate before accessing
@@ -86,6 +94,9 @@
 
 ## Red Flags
 
+- Direct SQL queries in code (use Supabase SDK: `.from()`, `.select()`, etc.)
+- Multiple `createClient` calls (use single client from `lib/supabase/client.ts`)
+- Custom database connections (use Supabase SDK only)
 - `as any` on anything except test mocks
 - `.then()` without `.catch()`
 - Optimistic updates without rollback

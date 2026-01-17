@@ -125,6 +125,14 @@ useQuery({ queryKey: queryKeys.org.byId(orgId) });
 
 ## Supabase & RLS
 
+**ALWAYS use the Supabase SDK (@supabase/supabase-js)**
+- Never write direct database queries or custom database connections
+- Use `.from()`, `.select()`, `.insert()`, `.update()`, `.delete()` from the SDK
+- For complex queries, use Supabase RPC functions (call via `.rpc()`)
+- Direct SQL is ONLY for: migrations, RLS policies, database functions (in Supabase dashboard)
+- Import from `lib/supabase/client.ts`, never create multiple clients
+
+**RLS & Data Access**
 - RLS policies must **never** query other RLS-protected tables — use SECURITY DEFINER helpers
 - Test RLS as: owner, member, visitor, unauthenticated
 - Nested selects (`select('*, relation(*)')`) return different shapes — validate before accessing
@@ -256,6 +264,9 @@ export function useAdaptiveNavigation() {
 
 | Pattern | Problem |
 |---------|---------|
+| Direct SQL queries in code | Use Supabase SDK (.from, .select, etc.) |
+| Multiple `createClient` calls | Use single client from lib/supabase/client.ts |
+| Custom database connection | Use Supabase SDK only |
 | `as any` | Create typed wrapper (except test mocks) |
 | `.then()` without `.catch()` | Add error handling |
 | `process.env.EXPO_PUBLIC_*` in component | Move to lib/config |
