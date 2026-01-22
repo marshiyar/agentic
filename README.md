@@ -170,6 +170,8 @@ For apps with projections, scenarios, verified claims:
 | `MEMORY.md` | Global development standards (symlinked to `~/.claude/CLAUDE.md`) |
 | `CLAUDE.md` | Chief of Staff identity for this repo |
 | `TECH_STACK.md` | Default stack reference |
+| **Learning** | |
+| `docs/dialogues/` | Earned lessons — conversations that shaped the standards |
 
 ---
 

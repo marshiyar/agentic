@@ -212,3 +212,4 @@ For non-trivial features, use plan mode:
 - Use `/sup` for quick status checks mid-session
 - Check `/fragile` before touching documented danger zones
 - For deep research: use `/research` skill (runs in forked context)
+- Read `docs/dialogues/` for context on engineering expectations — every lesson was earned
