@@ -294,4 +294,4 @@ Grow-prune is the right cycle. You just pruned. Let it sit.
 
 ## Lesson
 
-Don't build on top of tools you don't fully understand. The urge to create abstractions often reveals incomplete understanding of what already exists. Unix tools are code and context in one—the philosophy is embodied, not documented. AI collaboration works the same way: the meeting point is text, terminal, conversation. Not frameworks.
+Frameworks assume you know the shape of the work. When the thinking *is* the work, you need tools that make no assumptions. I work like Unix tools — small, composable, no assumptions about the problem. The good parts get absorbed into the core tool. Useful patterns become flags, options and arguments, not frameworks. Agentic doesn't need to be a product. Dialogues grow when lessons are earned.
