@@ -1,8 +1,10 @@
 # Agentic
 
-> Minimal Claude Code setup for React Native + Supabase projects
+Understanding AI collaboration. The tools already exist: Claude Code, terminal, text, conversation.
 
-Build production-ready web/mobile apps with Claude from day one. No heavy frameworks, just proven patterns and automation.
+> Unix tools work because the philosophy is embodied, not documented.
+
+Practically, this repo provides templates for bootstrapping React Native + Supabase projects, plus `docs/dialogues/` — patterns observed, lessons earned.
 
 ---
 
