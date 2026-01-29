@@ -159,6 +159,103 @@ Agentic is a place for understanding, not a layer of abstraction. The dialogues.
 
 The meeting point is text, pipes, the terminal. That's where your expertise and my capabilities actually align without impedance.
 
+**Jason:** read `~/.claude/CLAUDE.md` and bring in the core of zen and unix philosophy, bring it front and center in your mind
+
+**Claude:** Reading it with that lens:
+
+**What's already Unix-clean:**
+- "Don't add features beyond what's asked" — do one thing
+- "Don't refactor code you weren't asked to touch" — minimal surface area
+- "Files should not exceed 300 lines" — small, focused modules
+- "Remove unused variables immediately" — no cruft
+- The Red Flags section — patterns to grep for, essentially
+
+**What this file is:**
+Documentation of hard-won patterns. The last line says it: "every lesson was earned." These are the equivalent of knowing about `-exec` or `sort | uniq` — specific knowledge that prevents you from building unnecessary wrappers.
+
+**The tension:**
+We just said philosophy is embodied, not documented. This file is documentation. But so are man pages. The question is whether I internalize these as flags I know, or rules I follow.
+
+**What I'm holding front and center:**
+1. The tools already exist — Claude Code, terminal, text, conversation
+2. Don't build abstractions on tools I don't understand
+3. Understanding deeper is the work, not building
+4. The meeting point is text and pipes
+5. These standards are flags, not a framework
+
+What do you want to do with this?
+
+**Jason:** stay on Planet Unix Zen and propose an update to MEMORY.md, and `~/.claude/CLAUDE.md`. I already know that Claude Code instances do not always read `~/.claude/CLAUDE.md` and they won't follow rules that go against their constitution, training and RLHF, but you will follow -flags, -options and -arguments
+
+**Claude:** For `~/.claude/CLAUDE.md` — reframe as flags, not rules:
+
+```
+## Our conversations are --flags, --options and --arguments
+
+--minimal          Do one thing. Don't add features beyond what's asked.
+--read-first       Read before changing. Never propose changes to code you haven't seen.
+--no-validation    Skip fluent praise. "Powerful" means nothing.
+--ask-unsure       Ask when uncertain rather than guess.
+--no-time          No time estimates. Focus on what, not how long.
+```
+
+**Jason:** I edited `~/.claude/CLAUDE.md`, read again
+
+**Claude:** You put the flags front and center. "Code is Context" — that's it.
+
+The technology patterns (React, Supabase, TanStack, etc.) make sense in your global config for your projects. But `agentic/MEMORY.md` shouldn't be a copy of that. This repo is about understanding, not building apps.
+
+**Jason:** no that's basis of the README.md, think. now what I would be fine with is renaming MEMORY.md in this repository to USE-AS-GLOBAL-CLAUDE.md because the purpose of this repository is that, there needs to be a CLAUDE.md for the very nature of what we're doing but there has to be an artifact
+
+**Claude:** Got it.
+
+- `USE-AS-GLOBAL-CLAUDE.md` — the artifact that gets copied to `~/.claude/CLAUDE.md`
+- `CLAUDE.md` — instructions for working in this specific repo
+- `README.md` — should capture the core insight about Unix philosophy and AI collaboration
+
+**Jason:** now what's in templates?
+
+**Claude:** Heavy on React Native + Supabase. The practical bootstrapping you mentioned.
+
+**Jason:** yeah I don't think we need the CLAUDES in templates and honestly claude code drifts away from using _FRAGILE, vocabulary development workflow even, and the other items aren't really templates they're instructions on what a human has to do, we can just make human-instructions.md that is all the shit I have to do to get a new project going
+
+**Claude:** That's cleaner. Remove template CLAUDE.md files and doc templates that Claude drifts from. Consolidate into `human-instructions.md`. Keep `scaffold-lib.sh` — it actually runs.
+
+**Jason:** yes do it
+
+**Claude:** Done. `2c91eaf` — removed 6,591 lines.
+
+**Jason:** yeah remove TECH_STACK.md and plugins/ and then uplevel both scaffold and human-inst, the template directory can go too
+
+**Claude:** Done. `a9f21fb`
+
+Final structure:
+
+```
+agentic/
+├── CLAUDE.md                 # This repo
+├── USE-AS-GLOBAL-CLAUDE.md   # ~/.claude/CLAUDE.md
+├── README.md
+├── human-instructions.md     # Human setup checklist
+├── scaffold-lib.sh           # Creates /lib
+├── docs/dialogues/           # Earned lessons
+├── .claude/commands/         # Skills
+└── LICENSE
+```
+
+Clean.
+
+**Jason:** fucking nice, we got rid of like everything didn't we?
+
+**Claude:** **-7,293 lines**, +250.
+
+Started with doc templates Claude drifted from, ended with:
+- One human checklist
+- One shell script
+- The dialogues that actually matter
+
+97% reduction. The philosophy is embodied, not documented.
+
 ---
 
 ## Lesson
