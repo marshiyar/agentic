@@ -1,4 +1,5 @@
 .claude/settings.local.json
 .env.local
+.env.keys
 node_modules/
 mcp-servers/*/dist/

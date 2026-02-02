@@ -11,7 +11,7 @@
  *   2. Fall back to .env.local / environment variables
  */
 
-import { config } from "dotenv";
+import { config } from "@dotenvx/dotenvx";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 

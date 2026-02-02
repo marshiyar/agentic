@@ -11,7 +11,7 @@
  * Does NOT replicate CLIs/SDKs — just awareness and invocation.
  */
 
-import { config } from "dotenv";
+import { config } from "@dotenvx/dotenvx";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { readdir, stat, readFile } from "fs/promises";

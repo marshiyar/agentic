@@ -24,13 +24,54 @@ This creates the complete `/lib` structure with working starter files.
 ## 3. Install Dependencies
 
 ```bash
-npm install @supabase/supabase-js @tanstack/react-query
+npm install @supabase/supabase-js @tanstack/react-query @dotenvx/dotenvx
 npm install -D @types/react
 ```
 
 ---
 
-## 4. Supabase Setup
+## 4. dotenvx Setup
+
+Encrypted secrets management. Commit `.env` to git, keep private key separate.
+
+1. Install CLI:
+```bash
+brew install dotenvx/brew/dotenvx
+```
+
+2. Create `.env` with your secrets:
+```bash
+EXPO_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=xxx
+SUPABASE_SERVICE_ROLE_KEY=xxx
+```
+
+3. Encrypt:
+```bash
+dotenvx encrypt
+```
+
+4. This creates:
+   - `.env` — now encrypted, safe to commit
+   - `.env.keys` — private keys, add to `.gitignore`
+
+5. Add to `.gitignore`:
+```bash
+.env.keys
+```
+
+6. Share `DOTENV_PRIVATE_KEY` securely with team (not in git)
+
+Run commands with decryption:
+```bash
+dotenvx run -- npm start
+```
+
+Or set `DOTENV_PRIVATE_KEY` in your shell and use normally.
+
+---
+
+## 5. Supabase Setup
 
 1. Create project at https://supabase.com
 2. Get URL and anon key from Settings → API
@@ -51,7 +92,7 @@ npx supabase gen types typescript --project-id YOUR_PROJECT_ID > lib/supabase/ty
 
 ---
 
-## 5. MCP Servers Setup
+## 6. MCP Servers Setup
 
 ```bash
 cp -r ~/.agentic/mcp-servers ./
@@ -64,7 +105,7 @@ Restart Claude Code after setup.
 
 ---
 
-## 6. Supabase Vault (AI API Keys)
+## 7. Supabase Vault (AI API Keys)
 
 Store API keys in Vault instead of .env files.
 
@@ -93,7 +134,7 @@ Get service role key from: Supabase Dashboard → Settings → API → service_r
 
 ---
 
-## 7. Modal Setup
+## 8. Modal Setup
 
 1. Create account at https://modal.com
 2. Install CLI:
