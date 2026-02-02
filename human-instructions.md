@@ -144,7 +144,11 @@ The MCP servers try Vault first, fall back to dotenvx/.env automatically.
 
 2. Install Python (if needed):
 ```bash
+# macOS
 brew install python
+
+# Ubuntu/WSL
+sudo apt update && sudo apt install python3 python3-pip
 ```
 
 3. Install Modal CLI:
