@@ -105,32 +105,36 @@ Restart Claude Code after setup.
 
 ---
 
-## 7. Supabase Vault (AI API Keys)
+## 7. Supabase Vault (Optional)
 
-Store API keys in Vault instead of .env files.
+> **Skip this if solo.** dotenvx handles secrets. Vault is for teams or centralized key management across machines.
 
-### Add get_api_key function
+### When to use Vault
+
+- Team needs shared access to API keys
+- Multiple machines need same keys without sharing private key
+- Want keys stored in Supabase rather than git
+
+### Setup
 
 1. Supabase Dashboard → SQL Editor
 2. Run contents of `~/.agentic/supabase/get_api_key.sql`
 
-### Add keys to Vault
-
-1. Supabase Dashboard → Settings → Vault
-2. Add secrets:
+3. Supabase Dashboard → Settings → Vault
+4. Add secrets:
    - `openai_api_key` → your OpenAI key
    - `gemini_api_key` → your Gemini key
    - `voyage_api_key` → your Voyage key
 
-### Service role key for MCP
-
-Add to `.env.local`:
+5. MCP servers need service role key to access Vault. Add to `.env`:
 ```bash
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=xxx
 ```
 
 Get service role key from: Supabase Dashboard → Settings → API → service_role (secret)
+
+The MCP servers try Vault first, fall back to dotenvx/.env automatically.
 
 ---
 
