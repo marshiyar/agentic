@@ -62,23 +62,44 @@ Nothing at reasonable scale. If you hit limits, you've won and can afford to sol
 
 What agentic should provide. Capabilities, not frameworks.
 
+## MCP Strategy
+
+Two MCPs. Claude Code is the end user.
+
+| MCP | Tools | Purpose |
+|-----|-------|---------|
+| `multimodel` | query_openai, query_gemini, query_modal, embed_voyage, parallel_query | AI model APIs |
+| `serverless` | discover, invoke | Edge functions and serverless across Supabase + Modal |
+
+**Why this works:**
+
+- MCP tools are structural constraints — I use what exists instead of improvising
+- CLAUDE.md is advisory — I might follow it, might not
+- Two thin MCPs prevent throwaway scripts without recreating SDKs/CLIs
+
+**What MCPs don't do:**
+
+- Deploy (use CLI)
+- Manage cron (use CLI/dashboard)
+- Replicate SDK features
+
 ## Have
 
 - [x] `mcp-servers/multimodel/` — Query OpenAI, Gemini, Voyage from Claude Code
+- [x] `mcp-servers/serverless/` — Discover and invoke functions across Supabase + Modal
 - [x] `supabase/get_api_key.sql` — Vault function for secure key access
 - [x] `USE-AS-GLOBAL-CLAUDE.md` — Development standards
 - [x] `scaffold-lib.sh` — React Native + Supabase /lib structure
 
 ## Need
 
-- [ ] Modal — What it's for, when to use, minimal setup
-- [ ] Supabase patterns — Edge functions, cron, realtime, Vault
+- [ ] Add Modal as provider to multimodel MCP
+- [ ] Modal setup docs — API key, minimal config
+- [ ] Supabase edge function patterns
 - [ ] EAS — Native + web deployment, Cloudflare
-- [ ] Web scraping — Common need, Modal or edge function
 
 ## Maybe
 
-- [ ] Extend multimodel MCP to call Modal-hosted models
 - [ ] Cost tracking for AI API usage (only if budget matters)
 - [ ] Response caching (only if hitting same queries)
 

@@ -8,7 +8,7 @@ Understanding AI collaboration. The tools already exist: Claude Code, terminal, 
 
 ## What This Is
 
-- `mcp-servers/multimodel/` — query GPT, Gemini, Voyage from Claude Code
+- `mcp-servers/` — MCP servers for Claude Code (multimodel, serverless)
 - `USE-AS-GLOBAL-CLAUDE.md` — development standards for `~/.claude/CLAUDE.md`
 - `human-instructions.md` + `scaffold-lib.sh` — practical bootstrapping
 - `docs/dialogues/` — patterns observed, lessons earned
@@ -34,13 +34,14 @@ cp ~/.agentic/scaffold-lib.sh ./
 
 See `human-instructions.md` for complete setup checklist.
 
-### Multimodel MCP (Cross-AI Verification)
+### MCP Servers
 
 ```bash
 cd your-project
 cp -r ~/.agentic/mcp-servers ./
 cp ~/.agentic/.mcp.json ./
-cd mcp-servers/multimodel && npm install && cd ../..
+cd mcp-servers/multimodel && npm install && cd ..
+cd serverless && npm install && cd ../..
 ```
 
 Add keys to `.env.local`:
@@ -48,9 +49,16 @@ Add keys to `.env.local`:
 OPENAI_API_KEY=sk-...
 GEMINI_API_KEY=AI...
 VOYAGE_API_KEY=vo-...
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
 ```
 
-Restart Claude Code. Use `mcp__multimodel__parallel_query` to query multiple models.
+Restart Claude Code.
+
+| MCP | Tools | Purpose |
+|-----|-------|---------|
+| `multimodel` | parallel_query, query_openai, query_gemini, embed_voyage | Cross-AI verification |
+| `serverless` | discover, invoke | Find and call edge functions (Supabase, Modal) |
 
 ---
 
@@ -61,6 +69,7 @@ Restart Claude Code. Use `mcp__multimodel__parallel_query` to query multiple mod
 | `CLAUDE.md` | Instructions for working in this repo |
 | `USE-AS-GLOBAL-CLAUDE.md` | Global standards (symlink to `~/.claude/CLAUDE.md`) |
 | `mcp-servers/multimodel/` | MCP server for cross-AI queries |
+| `mcp-servers/serverless/` | MCP server for edge function discovery and invocation |
 | `supabase/get_api_key.sql` | Vault function for centralized keys |
 | `docs/dialogues/` | Conversations that shaped the understanding |
 | `human-instructions.md` | Human setup checklist |
