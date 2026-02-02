@@ -32,6 +32,26 @@ import OpenAI from "openai";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // =============================================================================
+// Model Configuration
+// =============================================================================
+
+const MODELS = {
+  openai: {
+    default: "gpt-5.2-pro-2025-12-11",
+    available: ["gpt-5.2-pro-2025-12-11", "gpt-5.2-2025-12-11"],
+    // Models that use Responses API instead of Chat Completions
+    responsesApi: ["gpt-5.2-pro-2025-12-11"],
+  },
+  gemini: {
+    default: "gemini-3-pro-preview",
+    available: ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash"],
+  },
+  voyage: {
+    default: "voyage-3",
+  },
+} as const;
+
+// =============================================================================
 // API Key Resolution
 // =============================================================================
 
@@ -126,9 +146,6 @@ async function getVoyageKey(): Promise<string> {
   return getApiKey("voyage");
 }
 
-// Models that use Responses API instead of Chat Completions
-const RESPONSES_API_MODELS = ["gpt-5.2-pro-2025-12-11"];
-
 async function queryOpenAIResponses(
   prompt: string,
   systemPrompt: string | undefined,
@@ -199,7 +216,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: "query_openai",
-        description: "Query OpenAI models",
+        description: `Query OpenAI models (${MODELS.openai.available.join(", ")})`,
         inputSchema: {
           type: "object",
           properties: {
@@ -207,8 +224,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             system_prompt: { type: "string", description: "Optional system prompt" },
             model: {
               type: "string",
-              description: "Model (default: gpt-5.2-pro-2025-12-11)",
-              enum: ["gpt-5.2-pro-2025-12-11", "gpt-5.2-2025-12-11", "gpt-4o", "gpt-4o-mini"],
+              description: `Model (default: ${MODELS.openai.default})`,
+              enum: MODELS.openai.available,
             },
             max_tokens: { type: "number", description: "Max tokens (default: 4096)" },
           },
@@ -217,7 +234,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "query_gemini",
-        description: "Query Gemini models",
+        description: `Query Gemini models (${MODELS.gemini.available.join(", ")})`,
         inputSchema: {
           type: "object",
           properties: {
@@ -225,8 +242,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             system_prompt: { type: "string", description: "Optional system instruction" },
             model: {
               type: "string",
-              description: "Model (default: gemini-3-pro-preview)",
-              enum: ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash"],
+              description: `Model (default: ${MODELS.gemini.default})`,
+              enum: MODELS.gemini.available,
             },
           },
           required: ["prompt"],
@@ -234,7 +251,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "embed_voyage",
-        description: "Get Voyage AI embeddings (voyage-3, 1024 dims)",
+        description: `Get Voyage AI embeddings (${MODELS.voyage.default}, 1024 dims)`,
         inputSchema: {
           type: "object",
           properties: {
@@ -258,13 +275,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             system_prompt: { type: "string", description: "Optional system prompt" },
             openai_model: {
               type: "string",
-              description: "OpenAI model (default: gpt-5.2-pro-2025-12-11)",
-              enum: ["gpt-5.2-pro-2025-12-11", "gpt-5.2-2025-12-11", "gpt-4o", "gpt-4o-mini"],
+              description: `OpenAI model (default: ${MODELS.openai.default})`,
+              enum: MODELS.openai.available,
             },
             gemini_model: {
               type: "string",
-              description: "Gemini model (default: gemini-3-pro-preview)",
-              enum: ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-3-pro-preview"],
+              description: `Gemini model (default: ${MODELS.gemini.default})`,
+              enum: MODELS.gemini.available,
             },
           },
           required: ["prompt"],
@@ -280,14 +297,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     switch (name) {
       case "query_openai": {
-        const { prompt, system_prompt, model = "gpt-5.2-pro-2025-12-11", max_tokens = 4096 } = args as {
+        const { prompt, system_prompt, model = MODELS.openai.default, max_tokens = 4096 } = args as {
           prompt: string;
           system_prompt?: string;
           model?: string;
           max_tokens?: number;
         };
 
-        if (RESPONSES_API_MODELS.includes(model)) {
+        if ((MODELS.openai.responsesApi as readonly string[]).includes(model)) {
           const result = await queryOpenAIResponses(prompt, system_prompt, model, max_tokens);
           return {
             content: [{
@@ -325,7 +342,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "query_gemini": {
-        const { prompt, system_prompt, model = "gemini-3-pro-preview" } = args as {
+        const { prompt, system_prompt, model = MODELS.gemini.default } = args as {
           prompt: string;
           system_prompt?: string;
           model?: string;
@@ -366,7 +383,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             Authorization: `Bearer ${voyageKey}`,
           },
           body: JSON.stringify({
-            model: "voyage-3",
+            model: MODELS.voyage.default,
             input: [text],
             input_type,
           }),
@@ -388,7 +405,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "parallel_query": {
-        const { prompt, system_prompt, openai_model = "gpt-5.2-pro-2025-12-11", gemini_model = "gemini-3-pro-preview" } = args as {
+        const { prompt, system_prompt, openai_model = MODELS.openai.default, gemini_model = MODELS.gemini.default } = args as {
           prompt: string;
           system_prompt?: string;
           openai_model?: string;
@@ -397,7 +414,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
         const [openaiResult, geminiResult] = await Promise.allSettled([
           (async () => {
-            if (RESPONSES_API_MODELS.includes(openai_model)) {
+            if ((MODELS.openai.responsesApi as readonly string[]).includes(openai_model)) {
               const result = await queryOpenAIResponses(prompt, system_prompt, openai_model, 4096);
               return { ...result, key_source: keySource["openai"] };
             }
