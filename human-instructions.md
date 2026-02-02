@@ -151,14 +151,14 @@ brew install python
 sudo apt update && sudo apt install python3 python3-pip
 ```
 
-3. Install Modal CLI:
+3. Install Modal:
 ```bash
 pip install modal
 ```
 
-4. Authenticate:
+4. Setup and authenticate:
 ```bash
-modal token new
+python3 -m modal setup
 ```
 
 5. Verify:
