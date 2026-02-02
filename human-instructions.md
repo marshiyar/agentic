@@ -1,6 +1,6 @@
 # Human Instructions
 
-> Everything a human needs to do to bootstrap a React Native + Supabase project.
+> Everything a human needs to do to bootstrap a project. Step-by-step for browser stuff (dummy mode).
 
 ---
 
@@ -51,7 +51,74 @@ npx supabase gen types typescript --project-id YOUR_PROJECT_ID > lib/supabase/ty
 
 ---
 
-## 5. Google OAuth Setup
+## 5. MCP Servers Setup
+
+```bash
+cp -r ~/.agentic/mcp-servers ./
+cp ~/.agentic/.mcp.json ./
+cd mcp-servers/multimodel && npm install && cd ..
+cd serverless && npm install && cd ../..
+```
+
+Restart Claude Code after setup.
+
+---
+
+## 6. Supabase Vault (AI API Keys)
+
+Store API keys in Vault instead of .env files.
+
+### Add get_api_key function
+
+1. Supabase Dashboard → SQL Editor
+2. Run contents of `~/.agentic/supabase/get_api_key.sql`
+
+### Add keys to Vault
+
+1. Supabase Dashboard → Settings → Vault
+2. Add secrets:
+   - `openai_api_key` → your OpenAI key
+   - `gemini_api_key` → your Gemini key
+   - `voyage_api_key` → your Voyage key
+
+### Service role key for MCP
+
+Add to `.env.local`:
+```bash
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=xxx
+```
+
+Get service role key from: Supabase Dashboard → Settings → API → service_role (secret)
+
+---
+
+## 7. Modal Setup
+
+1. Create account at https://modal.com
+2. Install CLI:
+```bash
+pip install modal
+```
+3. Authenticate:
+```bash
+modal token new
+```
+4. Verify:
+```bash
+modal app list
+```
+
+### Optional: Create modal/ directory
+```bash
+mkdir modal
+```
+
+Deploy functions with `modal deploy modal/your-function.py`
+
+---
+
+## 9. Google OAuth Setup (if needed)
 
 ### Supabase Dashboard
 1. Authentication → Providers → Google
@@ -76,7 +143,7 @@ EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID=xxx
 
 ---
 
-## 6. Third-Party Services
+## 10. Third-Party Services
 
 ### Priority 1: Core
 
@@ -111,7 +178,7 @@ npx supabase secrets set ANTHROPIC_API_KEY=xxx
 
 ---
 
-## 7. App Store Setup
+## 11. App Store Setup (if native)
 
 ### iOS (App Store Connect)
 
@@ -130,7 +197,7 @@ npx supabase secrets set ANTHROPIC_API_KEY=xxx
 
 ---
 
-## 8. EAS Build Configuration
+## 12. EAS Build Configuration
 
 Create `eas.json`:
 
@@ -156,7 +223,7 @@ Create `eas.json`:
 
 ---
 
-## 9. Responsive Layout
+## 13. Responsive Layout
 
 Build responsive from day one. iPad multi-pane and web layouts must work from first commit.
 
@@ -178,7 +245,7 @@ The scaffold script creates basic layout files. For full implementation:
 
 ---
 
-## 10. Verification
+## 14. Verification
 
 Run these checks before shipping:
 
