@@ -141,15 +141,23 @@ The MCP servers try Vault first, fall back to dotenvx/.env automatically.
 ## 8. Modal Setup
 
 1. Create account at https://modal.com
-2. Install CLI:
+
+2. Install Python (if needed):
+```bash
+brew install python
+```
+
+3. Install Modal CLI:
 ```bash
 pip install modal
 ```
-3. Authenticate:
+
+4. Authenticate:
 ```bash
 modal token new
 ```
-4. Verify:
+
+5. Verify:
 ```bash
 modal app list
 ```
