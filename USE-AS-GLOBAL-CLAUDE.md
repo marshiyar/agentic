@@ -20,6 +20,15 @@
 - When choosing between "do it right now" vs "do it later", bias toward now if it's cleaner
 - Codemod-style migrations (find/replace patterns across files) are trivial — never defer them for effort reasons
 
+## The Disintermediation Principle
+
+Keep frontier models in the critical path. Build infrastructure that amplifies model capabilities, not replaces them.
+
+- **Do:** MCP tools, compute infrastructure, data access layers
+- **Don't:** Consensus algorithms, prompt management systems, hardcoded reasoning flows
+
+When new models drop, apps with reasoning flowing through models get better automatically. Apps with logic baked into code get nicer explanations of the same outputs.
+
 ## Before Any Change
 
 - Run lint and tests first — never break them
