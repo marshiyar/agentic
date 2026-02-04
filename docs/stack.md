@@ -1,6 +1,6 @@
 # The Stack
 
-Personal momentum machine. Maximum velocity across all projects.
+Radically minimal. Maximum leverage from model improvements.
 
 ## Philosophy
 

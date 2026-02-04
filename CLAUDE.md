@@ -1,6 +1,6 @@
 # Agentic
 
-Understanding AI collaboration. Not a framework.
+Radically minimal. Maximum leverage from model improvements.
 
 The tools already exist: Claude Code, terminal, text, conversation.
 Don't build on tools you don't fully understand.

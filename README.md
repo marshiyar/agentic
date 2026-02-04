@@ -1,6 +1,6 @@
 # Agentic
 
-Understanding AI collaboration. The tools already exist: Claude Code, terminal, text, conversation.
+Radically minimal. Maximum leverage from model improvements.
 
 > Unix tools work because the philosophy is embodied, not documented.
 
