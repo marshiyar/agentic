@@ -12,6 +12,27 @@ Traditional enterprise: infrastructure → guardrails → workflows → approval
 
 This: capabilities + Claude Code + judgment → ship.
 
+## The Disintermediation Principle
+
+Keep frontier models in the critical path. Build infrastructure that amplifies model capabilities, not replaces them.
+
+**Traditional approach:**
+Logic in code → Models explain results → New models = same results
+
+**Model-centric approach:**
+Models do reasoning → Code supports models → New models = better results
+
+When three frontier models dropped simultaneously (Dec 2025), apps with reasoning flowing through models immediately got:
+- Better equation verification
+- Better analysis generation
+- Better cross-validation
+- Better understanding of constraints
+
+Apps with logic baked into code got nicer explanations of the same outputs.
+
+**Build:** MCP tools, compute infrastructure, data access
+**Don't build:** Consensus algorithms, prompt management, hardcoded reasoning flows
+
 ## The Stack
 
 | Layer | Service | Why |
