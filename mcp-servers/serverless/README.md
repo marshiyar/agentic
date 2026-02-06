@@ -1,6 +1,6 @@
 # Serverless MCP Server
 
-Discover and invoke serverless functions across Supabase and Modal.
+Discover and invoke Supabase edge functions.
 
 ## Why
 
@@ -10,7 +10,7 @@ Claude Code writes throwaway scripts. This MCP provides awareness of what exists
 
 | Tool | What it does |
 |------|--------------|
-| `discover` | Scan project for Supabase edge functions and Modal apps |
+| `discover` | Scan project for Supabase edge functions |
 | `invoke` | Call a function by name, route to correct service |
 
 ## Setup
@@ -39,8 +39,6 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
 ```
 
-For Modal, have the CLI installed and authenticated (`modal token new`).
-
 ## Usage
 
 ```
@@ -50,7 +48,7 @@ mcp__serverless__invoke({ name: "my-function", payload: { ... } })
 
 ## What This Doesn't Do
 
-- Deploy functions (use `supabase functions deploy` or `modal deploy`)
+- Deploy functions (use `supabase functions deploy`)
 - Manage cron (use Supabase dashboard)
 - Replicate SDKs
 

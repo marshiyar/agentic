@@ -42,7 +42,7 @@ MCP server (stdio, not ports)
 Keys from Vault or .env.local
 ```
 
-~380 lines of TypeScript. Claude does the rest.
+~490 lines of TypeScript. Claude does the rest.
 
 ## Usage
 

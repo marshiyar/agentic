@@ -152,41 +152,7 @@ The MCP servers try Vault first, fall back to dotenvx/.env automatically.
 
 ---
 
-## 9. Modal Setup
-
-1. Create account at https://modal.com
-
-2. Install Modal:
-```bash
-# macOS
-brew install pipx
-pipx install modal
-
-# Ubuntu/WSL
-sudo apt update && sudo apt install python3 python3-pip
-pip install modal
-```
-
-4. Setup and authenticate:
-```bash
-python3 -m modal setup
-```
-
-5. Verify:
-```bash
-modal app list
-```
-
-### Optional: Create modal/ directory
-```bash
-mkdir modal
-```
-
-Deploy functions with `modal deploy modal/your-function.py`
-
----
-
-## 10. Google OAuth Setup (if needed)
+## 9. Google OAuth Setup (if needed)
 
 ### Supabase Dashboard
 1. Authentication → Providers → Google
@@ -211,7 +177,7 @@ EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID=xxx
 
 ---
 
-## 11. Third-Party Services
+## 10. Third-Party Services
 
 ### Priority 1: Core
 
@@ -246,7 +212,7 @@ npx supabase secrets set ANTHROPIC_API_KEY=xxx
 
 ---
 
-## 12. App Store Setup (if native)
+## 11. App Store Setup (if native)
 
 ### iOS (App Store Connect)
 
@@ -265,7 +231,7 @@ npx supabase secrets set ANTHROPIC_API_KEY=xxx
 
 ---
 
-## 13. EAS Build Configuration
+## 12. EAS Build Configuration
 
 Create `eas.json`:
 
@@ -291,7 +257,7 @@ Create `eas.json`:
 
 ---
 
-## 14. Responsive Layout
+## 13. Responsive Layout
 
 Build responsive from day one. iPad multi-pane and web layouts must work from first commit.
 
@@ -313,7 +279,7 @@ The scaffold script creates basic layout files. For full implementation:
 
 ---
 
-## 15. Verification
+## 14. Verification
 
 Run these checks before shipping:
 

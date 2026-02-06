@@ -38,7 +38,6 @@ Apps with logic baked into code got nicer explanations of the same outputs.
 | Layer | Service | Why |
 |-------|---------|-----|
 | Database | Supabase | DB, auth, Vault, storage, realtime, cron, edge functions |
-| Compute | Modal | Python, GPU, notebooks, heavy compute |
 | AI APIs | OpenAI, Gemini, Voyage | Via multimodel MCP |
 | Client | EAS | Native + web, Cloudflare in front |
 | Web-only | Vercel / Cloudflare / Netlify | If no native needed |
@@ -60,7 +59,6 @@ Apps with logic baked into code got nicer explanations of the same outputs.
 | State | Supabase |
 | Cron | Supabase |
 | Auth-adjacent logic | Supabase Edge Functions |
-| Python / GPU / heavy compute | Modal |
 | External AI queries | Multimodel MCP |
 | Rendering | EAS / Vercel |
 
@@ -89,8 +87,8 @@ Two MCPs. Claude Code is the end user.
 
 | MCP | Tools | Purpose |
 |-----|-------|---------|
-| `multimodel` | query_openai, query_gemini, query_modal, embed_voyage, parallel_query | AI model APIs |
-| `serverless` | discover, invoke | Edge functions and serverless across Supabase + Modal |
+| `multimodel` | query_openai, query_gemini, embed_voyage, parallel_query | AI model APIs |
+| `serverless` | discover, invoke | Edge functions (Supabase) |
 
 **Why this works:**
 
@@ -107,7 +105,7 @@ Two MCPs. Claude Code is the end user.
 ## Have
 
 - [x] `mcp-servers/multimodel/` — Query OpenAI, Gemini, Voyage from Claude Code
-- [x] `mcp-servers/serverless/` — Discover and invoke functions across Supabase + Modal
+- [x] `mcp-servers/serverless/` — Discover and invoke Supabase edge functions
 - [x] `supabase/get_api_key.sql` — Vault function for secure key access
 - [x] `USE-AS-GLOBAL-CLAUDE.md` — Development standards
 - [x] `scaffold-lib.sh` — React Native + Supabase /lib structure
@@ -118,8 +116,6 @@ Two MCPs. Claude Code is the end user.
 
 ## Need
 
-- [ ] Add Modal as provider to multimodel MCP
-- [ ] Modal setup docs — API key, minimal config
 - [ ] Supabase edge function patterns
 - [ ] EAS — Native + web deployment, Cloudflare
 

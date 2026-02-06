@@ -58,7 +58,7 @@ Restart Claude Code.
 | MCP | Tools | Purpose |
 |-----|-------|---------|
 | `multimodel` | parallel_query, query_openai, query_gemini, embed_voyage | Cross-AI verification |
-| `serverless` | discover, invoke | Find and call edge functions (Supabase, Modal) |
+| `serverless` | discover, invoke | Find and call Supabase edge functions |
 
 ---
 

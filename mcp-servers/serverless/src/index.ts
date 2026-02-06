@@ -5,17 +5,16 @@
  *
  * Two tools for Claude Code:
  *   - discover: What serverless functions exist in this project?
- *   - invoke: Call a function by name, route to correct service
+ *   - invoke: Call a function by name
  *
- * Supports: Supabase Edge Functions, Modal
+ * Supports: Supabase Edge Functions
  * Does NOT replicate CLIs/SDKs — just awareness and invocation.
  */
 
 import { config } from "@dotenvx/dotenvx";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
-import { readdir, stat, readFile } from "fs/promises";
-import { execSync } from "child_process";
+import { readdir, stat } from "fs/promises";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "../../..");
@@ -35,12 +34,12 @@ import {
 
 interface FunctionInfo {
   name: string;
-  service: "supabase" | "modal";
+  service: "supabase";
   path?: string;
   endpoint?: string;
 }
 
-async function discoverSupabaseFunctions(): Promise<FunctionInfo[]> {
+async function discoverFunctions(): Promise<FunctionInfo[]> {
   const functions: FunctionInfo[] = [];
   const functionsDir = resolve(projectRoot, "supabase/functions");
 
@@ -66,67 +65,11 @@ async function discoverSupabaseFunctions(): Promise<FunctionInfo[]> {
   return functions;
 }
 
-async function discoverModalFunctions(): Promise<FunctionInfo[]> {
-  const functions: FunctionInfo[] = [];
-
-  // Check for modal apps via CLI
-  try {
-    const output = execSync("modal app list --json 2>/dev/null", {
-      encoding: "utf-8",
-      timeout: 10000,
-    });
-    const apps = JSON.parse(output);
-    for (const app of apps) {
-      functions.push({
-        name: app.name || app.app_id,
-        service: "modal",
-        endpoint: app.web_url,
-      });
-    }
-  } catch (e) {
-    // Modal CLI not available or no apps
-  }
-
-  // Also scan for Python files with Modal decorators
-  try {
-    const modalDir = resolve(projectRoot, "modal");
-    const entries = await readdir(modalDir);
-    for (const entry of entries) {
-      if (entry.endsWith(".py")) {
-        const content = await readFile(resolve(modalDir, entry), "utf-8");
-        if (content.includes("@app.") || content.includes("@stub.") || content.includes("modal.")) {
-          const name = entry.replace(".py", "");
-          // Don't duplicate if already found via CLI
-          if (!functions.find(f => f.name === name)) {
-            functions.push({
-              name,
-              service: "modal",
-              path: `modal/${entry}`,
-            });
-          }
-        }
-      }
-    }
-  } catch (e) {
-    // No modal directory
-  }
-
-  return functions;
-}
-
-async function discoverAll(): Promise<FunctionInfo[]> {
-  const [supabase, modal] = await Promise.all([
-    discoverSupabaseFunctions(),
-    discoverModalFunctions(),
-  ]);
-  return [...supabase, ...modal];
-}
-
 // =============================================================================
 // Invocation
 // =============================================================================
 
-async function invokeSupabase(
+async function invokeFunction(
   name: string,
   payload: unknown,
   endpoint?: string
@@ -145,50 +88,6 @@ async function invokeSupabase(
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${supabaseKey}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  const contentType = response.headers.get("content-type");
-  const result = contentType?.includes("application/json")
-    ? await response.json()
-    : await response.text();
-
-  return { result, status: response.status };
-}
-
-async function invokeModal(
-  name: string,
-  payload: unknown,
-  endpoint?: string
-): Promise<{ result: unknown; status: number }> {
-  if (!endpoint) {
-    // Try to get endpoint from modal app list
-    try {
-      const output = execSync(`modal app list --json 2>/dev/null`, {
-        encoding: "utf-8",
-        timeout: 10000,
-      });
-      const apps = JSON.parse(output);
-      const app = apps.find((a: { name?: string; app_id?: string }) =>
-        a.name === name || a.app_id === name
-      );
-      if (app?.web_url) {
-        endpoint = app.web_url;
-      }
-    } catch (e) {
-      // Fall through to error
-    }
-  }
-
-  if (!endpoint) {
-    throw new Error(`No endpoint found for Modal function '${name}'. Deploy with a web_endpoint or provide endpoint directly.`);
-  }
-
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
   });
@@ -222,32 +121,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: "discover",
-        description: "Discover serverless functions in this project (Supabase edge functions, Modal apps)",
+        description: "Discover Supabase edge functions in this project",
         inputSchema: {
           type: "object",
-          properties: {
-            service: {
-              type: "string",
-              description: "Filter by service (optional)",
-              enum: ["supabase", "modal"],
-            },
-          },
+          properties: {},
         },
       },
       {
         name: "invoke",
-        description: "Invoke a serverless function by name",
+        description: "Invoke a Supabase edge function by name",
         inputSchema: {
           type: "object",
           properties: {
             name: {
               type: "string",
               description: "Function name",
-            },
-            service: {
-              type: "string",
-              description: "Service (supabase or modal). Auto-detected if omitted.",
-              enum: ["supabase", "modal"],
             },
             payload: {
               type: "object",
@@ -271,12 +159,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     switch (name) {
       case "discover": {
-        const { service } = args as { service?: "supabase" | "modal" };
-        let functions = await discoverAll();
-
-        if (service) {
-          functions = functions.filter(f => f.service === service);
-        }
+        const functions = await discoverFunctions();
 
         return {
           content: [{
@@ -284,45 +167,26 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             text: JSON.stringify({
               functions,
               count: functions.length,
-              by_service: {
-                supabase: functions.filter(f => f.service === "supabase").length,
-                modal: functions.filter(f => f.service === "modal").length,
-              },
             }, null, 2),
           }],
         };
       }
 
       case "invoke": {
-        const { name: fnName, service, payload = {}, endpoint } = args as {
+        const { name: fnName, payload = {}, endpoint } = args as {
           name: string;
-          service?: "supabase" | "modal";
           payload?: unknown;
           endpoint?: string;
         };
 
-        // Auto-detect service if not provided
-        let targetService = service;
-        if (!targetService) {
-          const functions = await discoverAll();
-          const fn = functions.find(f => f.name === fnName);
-          if (fn) {
-            targetService = fn.service;
-          } else {
-            throw new Error(`Function '${fnName}' not found. Run discover first or specify service.`);
-          }
-        }
-
-        const result = targetService === "supabase"
-          ? await invokeSupabase(fnName, payload, endpoint)
-          : await invokeModal(fnName, payload, endpoint);
+        const result = await invokeFunction(fnName, payload, endpoint);
 
         return {
           content: [{
             type: "text",
             text: JSON.stringify({
               function: fnName,
-              service: targetService,
+              service: "supabase",
               ...result,
             }, null, 2),
           }],
