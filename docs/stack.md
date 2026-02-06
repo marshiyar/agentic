@@ -112,7 +112,9 @@ Two MCPs. Claude Code is the end user.
 - [x] `USE-AS-GLOBAL-CLAUDE.md` — Development standards
 - [x] `scaffold-lib.sh` — React Native + Supabase /lib structure
 - [x] Claude Code auto-memory — built-in session continuity (replaces _NEXT_SESSION_MEMO.md)
-- [x] Agent teams — task decomposition across specialized sub-agents (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`)
+- [x] Built-in plugins — commit-commands, code-review, feature-dev, context7, frontend-design, etc.
+- [x] Built-in plan mode (`EnterPlanMode`) — replaces custom /plan command
+- [x] Built-in explore agents (`Task` tool with `Explore` subagent) — replaces custom /research command
 
 ## Need
 

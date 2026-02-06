@@ -92,7 +92,21 @@ npx supabase gen types typescript --project-id YOUR_PROJECT_ID > lib/supabase/ty
 
 ---
 
-## 6. MCP Servers Setup
+## 6. Claude Code Built-in Capabilities
+
+These are built in — no setup required:
+
+| Capability | What it does |
+|-----------|--------------|
+| **Auto memory** | Persistent project context across sessions (`~/.claude/projects/`) |
+| **Plan mode** | Two-phase explore→approve workflow before implementation |
+| **Explore agents** | Isolated deep research without polluting main context |
+| **Plugins** | commit-commands, code-review, feature-dev, context7, frontend-design, etc. |
+| **MCP marketplace** | Official + custom plugin sources for extending capabilities |
+
+Enable plugins: `claude code` → settings → plugins
+
+## 7. Custom MCP Servers Setup
 
 ```bash
 cp -r ~/.agentic/mcp-servers ./
@@ -105,7 +119,7 @@ Restart Claude Code after setup.
 
 ---
 
-## 7. Supabase Vault (Optional)
+## 8. Supabase Vault (Optional)
 
 > **Skip this if solo.** dotenvx handles secrets. Vault is for teams or centralized key management across machines.
 
@@ -138,7 +152,7 @@ The MCP servers try Vault first, fall back to dotenvx/.env automatically.
 
 ---
 
-## 8. Modal Setup
+## 9. Modal Setup
 
 1. Create account at https://modal.com
 
@@ -172,7 +186,7 @@ Deploy functions with `modal deploy modal/your-function.py`
 
 ---
 
-## 9. Google OAuth Setup (if needed)
+## 10. Google OAuth Setup (if needed)
 
 ### Supabase Dashboard
 1. Authentication → Providers → Google
@@ -197,7 +211,7 @@ EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID=xxx
 
 ---
 
-## 10. Third-Party Services
+## 11. Third-Party Services
 
 ### Priority 1: Core
 
@@ -232,7 +246,7 @@ npx supabase secrets set ANTHROPIC_API_KEY=xxx
 
 ---
 
-## 11. App Store Setup (if native)
+## 12. App Store Setup (if native)
 
 ### iOS (App Store Connect)
 
@@ -251,7 +265,7 @@ npx supabase secrets set ANTHROPIC_API_KEY=xxx
 
 ---
 
-## 12. EAS Build Configuration
+## 13. EAS Build Configuration
 
 Create `eas.json`:
 
@@ -277,7 +291,7 @@ Create `eas.json`:
 
 ---
 
-## 13. Responsive Layout
+## 14. Responsive Layout
 
 Build responsive from day one. iPad multi-pane and web layouts must work from first commit.
 
@@ -299,7 +313,7 @@ The scaffold script creates basic layout files. For full implementation:
 
 ---
 
-## 14. Verification
+## 15. Verification
 
 Run these checks before shipping:
 

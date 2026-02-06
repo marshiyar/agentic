@@ -11,7 +11,7 @@ Radically minimal. Maximum leverage from model improvements.
 - `mcp-servers/` — MCP servers for Claude Code (multimodel, serverless)
 - `USE-AS-GLOBAL-CLAUDE.md` — development standards for `~/.claude/CLAUDE.md`
 - `human-instructions.md` + `scaffold-lib.sh` — practical bootstrapping
-- `docs/dialogues/` — patterns observed, lessons earned
+- `docs/` — patterns observed, lessons earned
 
 ---
 
