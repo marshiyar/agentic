@@ -96,6 +96,7 @@ async function queryOpenAIResponses(
     body: JSON.stringify({
       model,
       input,
+      reasoning: { effort: "high" },
     }),
   });
 
@@ -245,6 +246,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const response = await openai.chat.completions.create({
           model,
           messages,
+          reasoning_effort: "high",
         });
 
         return {
