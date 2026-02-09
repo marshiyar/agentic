@@ -29,7 +29,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 // =============================================================================
 // Model Configuration
@@ -126,7 +126,7 @@ async function getApiKey(provider: "openai" | "google" | "voyage"): Promise<stri
 // =============================================================================
 
 let openaiClient: OpenAI | null = null;
-let geminiClient: GoogleGenerativeAI | null = null;
+let geminiClient: GoogleGenAI | null = null;
 
 async function getOpenAI(): Promise<OpenAI> {
   if (openaiClient) return openaiClient;
@@ -135,10 +135,10 @@ async function getOpenAI(): Promise<OpenAI> {
   return openaiClient;
 }
 
-async function getGemini(): Promise<GoogleGenerativeAI> {
+async function getGemini(): Promise<GoogleGenAI> {
   if (geminiClient) return geminiClient;
   const apiKey = await getApiKey("google");
-  geminiClient = new GoogleGenerativeAI(apiKey);
+  geminiClient = new GoogleGenAI({ apiKey });
   return geminiClient;
 }
 
@@ -245,6 +245,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: `Model (default: ${MODELS.gemini.default})`,
               enum: MODELS.gemini.available,
             },
+            max_tokens: { type: "number", description: "Max output tokens (default: 4096)" },
           },
           required: ["prompt"],
         },
@@ -342,27 +343,30 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case "query_gemini": {
-        const { prompt, system_prompt, model = MODELS.gemini.default } = args as {
+        const { prompt, system_prompt, model = MODELS.gemini.default, max_tokens = 4096 } = args as {
           prompt: string;
           system_prompt?: string;
           model?: string;
+          max_tokens?: number;
         };
 
-        const genAI = await getGemini();
-        const geminiModel = genAI.getGenerativeModel({
+        const ai = await getGemini();
+        const result = await ai.models.generateContent({
           model,
-          systemInstruction: system_prompt,
+          contents: prompt,
+          config: {
+            maxOutputTokens: max_tokens,
+            ...(system_prompt && { systemInstruction: system_prompt }),
+          },
         });
-
-        const result = await geminiModel.generateContent(prompt);
 
         return {
           content: [{
             type: "text",
             text: JSON.stringify({
-              content: result.response.text(),
+              content: result.text,
               model,
-              usage: result.response.usageMetadata,
+              usage: result.usageMetadata,
               key_source: keySource["google"],
             }, null, 2),
           }],
@@ -436,16 +440,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             };
           })(),
           (async () => {
-            const genAI = await getGemini();
-            const model = genAI.getGenerativeModel({
+            const ai = await getGemini();
+            const result = await ai.models.generateContent({
               model: gemini_model,
-              systemInstruction: system_prompt,
+              contents: prompt,
+              config: {
+                maxOutputTokens: 4096,
+                ...(system_prompt && { systemInstruction: system_prompt }),
+              },
             });
-            const result = await model.generateContent(prompt);
             return {
               model: gemini_model,
-              content: result.response.text(),
-              usage: result.response.usageMetadata,
+              content: result.text,
+              usage: result.usageMetadata,
               key_source: keySource["google"],
             };
           })(),
