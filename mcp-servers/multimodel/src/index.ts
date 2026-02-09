@@ -4,22 +4,8 @@
  * Multimodel MCP Server
  *
  * Provides tools for querying multiple LLM providers (OpenAI, Gemini, Voyage).
- * Claude Code as orchestrator calls these to cross-validate, research, or embed.
- *
- * API Key Resolution:
- *   1. Try Supabase Vault via get_api_key() RPC
- *   2. Fall back to .env.local / environment variables
+ * API keys come from environment variables (passed via MCP config env block).
  */
-
-import { config } from "@dotenvx/dotenvx";
-import { resolve, dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const projectRoot = resolve(__dirname, "../../..");
-
-// Load .env.local from project root (fallback source for keys)
-config({ path: resolve(projectRoot, ".env.local") });
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -27,7 +13,6 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 
@@ -52,73 +37,21 @@ const MODELS = {
 } as const;
 
 // =============================================================================
-// API Key Resolution
+// API Key Resolution — env vars only
 // =============================================================================
 
-let supabase: SupabaseClient | null = null;
-const keyCache: Record<string, string> = {};
-const keySource: Record<string, string> = {};
+const ENV_NAMES: Record<string, string> = {
+  openai: "OPENAI_API_KEY",
+  google: "GEMINI_API_KEY",
+  voyage: "VOYAGE_API_KEY",
+};
 
-function getSupabaseClient(): SupabaseClient | null {
-  if (supabase) return supabase;
-
-  const url = process.env.SUPABASE_URL || process.env.EXPO_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !key) {
-    console.error("[multimodel] No Supabase credentials, Vault unavailable");
-    return null;
+function getApiKey(provider: "openai" | "google" | "voyage"): string {
+  const key = process.env[ENV_NAMES[provider]];
+  if (!key) {
+    throw new Error(`${ENV_NAMES[provider]} not set`);
   }
-
-  supabase = createClient(url, key);
-  return supabase;
-}
-
-async function getApiKey(provider: "openai" | "google" | "voyage"): Promise<string> {
-  if (keyCache[provider]) {
-    return keyCache[provider];
-  }
-
-  const vaultNames: Record<string, string> = {
-    openai: "openai_api_key",
-    google: "gemini_api_key",
-    voyage: "voyage_api_key",
-  };
-  const envNames: Record<string, string> = {
-    openai: "OPENAI_API_KEY",
-    google: "GEMINI_API_KEY",
-    voyage: "VOYAGE_API_KEY",
-  };
-
-  // Try Vault first
-  const client = getSupabaseClient();
-  if (client) {
-    try {
-      const { data, error } = await client.rpc("get_api_key", {
-        key_name: vaultNames[provider],
-      });
-
-      if (!error && data) {
-        keyCache[provider] = data;
-        keySource[provider] = "vault";
-        console.error(`[multimodel] ${provider} key loaded from Vault`);
-        return data;
-      }
-    } catch (e) {
-      console.error(`[multimodel] Vault lookup failed for ${provider}: ${e}`);
-    }
-  }
-
-  // Fall back to environment variable
-  const envKey = process.env[envNames[provider]];
-  if (envKey) {
-    keyCache[provider] = envKey;
-    keySource[provider] = "env";
-    console.error(`[multimodel] ${provider} key loaded from env`);
-    return envKey;
-  }
-
-  throw new Error(`No API key found for ${provider} (checked Vault and env)`);
+  return key;
 }
 
 // =============================================================================
@@ -128,22 +61,16 @@ async function getApiKey(provider: "openai" | "google" | "voyage"): Promise<stri
 let openaiClient: OpenAI | null = null;
 let geminiClient: GoogleGenAI | null = null;
 
-async function getOpenAI(): Promise<OpenAI> {
+function getOpenAI(): OpenAI {
   if (openaiClient) return openaiClient;
-  const apiKey = await getApiKey("openai");
-  openaiClient = new OpenAI({ apiKey });
+  openaiClient = new OpenAI({ apiKey: getApiKey("openai") });
   return openaiClient;
 }
 
-async function getGemini(): Promise<GoogleGenAI> {
+function getGemini(): GoogleGenAI {
   if (geminiClient) return geminiClient;
-  const apiKey = await getApiKey("google");
-  geminiClient = new GoogleGenAI({ apiKey });
+  geminiClient = new GoogleGenAI({ apiKey: getApiKey("google") });
   return geminiClient;
-}
-
-async function getVoyageKey(): Promise<string> {
-  return getApiKey("voyage");
 }
 
 async function queryOpenAIResponses(
@@ -152,7 +79,7 @@ async function queryOpenAIResponses(
   model: string,
   maxTokens: number
 ): Promise<{ content: string; model: string; usage: unknown }> {
-  const apiKey = await getApiKey("openai");
+  const apiKey = getApiKey("openai");
 
   const input = systemPrompt
     ? [
@@ -310,15 +237,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           return {
             content: [{
               type: "text",
-              text: JSON.stringify({
-                ...result,
-                key_source: keySource["openai"],
-              }, null, 2),
+              text: JSON.stringify(result, null, 2),
             }],
           };
         }
 
-        const openai = await getOpenAI();
+        const openai = getOpenAI();
         const messages: OpenAI.ChatCompletionMessageParam[] = [];
         if (system_prompt) messages.push({ role: "system", content: system_prompt });
         messages.push({ role: "user", content: prompt });
@@ -336,7 +260,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               content: response.choices[0]?.message?.content,
               model: response.model,
               usage: response.usage,
-              key_source: keySource["openai"],
             }, null, 2),
           }],
         };
@@ -350,7 +273,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           max_tokens?: number;
         };
 
-        const ai = await getGemini();
+        const ai = getGemini();
         const result = await ai.models.generateContent({
           model,
           contents: prompt,
@@ -367,7 +290,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               content: result.text,
               model,
               usage: result.usageMetadata,
-              key_source: keySource["google"],
             }, null, 2),
           }],
         };
@@ -379,7 +301,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           input_type?: string;
         };
 
-        const voyageKey = await getVoyageKey();
+        const voyageKey = getApiKey("voyage");
         const response = await fetch("https://api.voyageai.com/v1/embeddings", {
           method: "POST",
           headers: {
@@ -402,7 +324,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               embedding: data.data?.[0]?.embedding,
               dimensions: data.data?.[0]?.embedding?.length,
               usage: data.usage,
-              key_source: keySource["voyage"],
             }, null, 2),
           }],
         };
@@ -419,11 +340,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const [openaiResult, geminiResult] = await Promise.allSettled([
           (async () => {
             if ((MODELS.openai.responsesApi as readonly string[]).includes(openai_model)) {
-              const result = await queryOpenAIResponses(prompt, system_prompt, openai_model, 4096);
-              return { ...result, key_source: keySource["openai"] };
+              return queryOpenAIResponses(prompt, system_prompt, openai_model, 4096);
             }
 
-            const openai = await getOpenAI();
+            const openai = getOpenAI();
             const messages: OpenAI.ChatCompletionMessageParam[] = [];
             if (system_prompt) messages.push({ role: "system", content: system_prompt });
             messages.push({ role: "user", content: prompt });
@@ -436,11 +356,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               model: openai_model,
               content: response.choices[0]?.message?.content,
               usage: response.usage,
-              key_source: keySource["openai"],
             };
           })(),
           (async () => {
-            const ai = await getGemini();
+            const ai = getGemini();
             const result = await ai.models.generateContent({
               model: gemini_model,
               contents: prompt,
@@ -453,7 +372,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               model: gemini_model,
               content: result.text,
               usage: result.usageMetadata,
-              key_source: keySource["google"],
             };
           })(),
         ]);
