@@ -1,6 +1,6 @@
 # AI in the Critical Path
 
-*What it means when a model can hold your entire corpus in working memory and reason across all of it simultaneously.*
+*What it means when the marginal cost of cross-referencing approaches zero.*
 
 ---
 
@@ -10,9 +10,11 @@ Law has 275,000 sections of statute and regulation. Medicine has millions of pap
 
 The entire history of expertise in every field is humans reasoning about fragments of a system too large for any brain to hold at once.
 
-Frontier models do not have that limitation — in principle. In practice, even a two-million-token context window can't fit millions of medical papers or decades of financial transactions into a single prompt. The asymmetry is real but not infinite. What changes is the unit of reasoning: a human reasons about one document at a time; a model reasons about tens of thousands at a time, and can traverse the rest through agentic tool use — following chains, pulling in what it needs, building understanding iteratively across the full corpus rather than staring at fragments.
+Frontier models have a different limitation. Today, a two-million-token context window holds roughly the equivalent of 15 novels, or maybe 10,000 pages of legal text. That's a lot — enough to hold the entirety of Title 26 (the tax code) or a mid-size codebase in a single prompt. But it's not millions of medical papers. It's not decades of financial transactions. The model reasons about tens of thousands of documents at a time where a human reasons about one.
 
-This is not an incremental improvement. It is a categorical change in what analysis is possible. The patterns that are invisible when you can only see fragments become obvious when you can see the structure. Not always in a single pass — sometimes through autonomous traversal, hierarchical reasoning, or iterative deepening — but with the model in the driver's seat, deciding what to look at next, not a retrieval pipeline deciding for it.
+What's changing is the trajectory. Context windows have gone from 4K to 200K to 2M tokens in three years. At 10M tokens — plausible in the near term — you hold the entire U.S. Code. At 100M, you hold the Code of Federal Regulations alongside it. These aren't hypotheticals; they're the curve we're on. Each jump doesn't just add capacity — it eliminates an entire class of problems that required retrieval, chunking, and lossy summarization.
+
+For what exceeds context today, the model traverses — following chains, pulling in what it needs, building understanding iteratively. This is retrieval, but with a difference: the model decides what to look at next, not a pipeline. It's sequential search with a lossy scratchpad, not simultaneous omniscience. The honest framing is that the marginal cost of cross-referencing approaches zero, and the unit of reasoning keeps getting larger. The patterns that are invisible when you can only see fragments become visible as you can see more of the structure — and each generation of model sees more.
 
 ## Axioms, Not Instructions
 
@@ -21,6 +23,8 @@ The difference between using a model as a tool and keeping it in the critical pa
 **Instructions** tell a model what to do. "Summarize this document." "Find errors in this code." "Answer this question." The model executes a task and returns a result. The human remains the reasoning engine. The model is a faster typist.
 
 **Axioms** tell a model what to reason from. Non-negotiable first principles that govern how every piece of data in the corpus should be evaluated. Not positions to argue — foundations to build on.
+
+Technically, an axiom is still an instruction — the model doesn't know the difference. The distinction is for humans. It's about the quality of what you give the model. An axiom is a refined instruction: one that has been thought through, pressure-tested, and stated precisely enough that consistent application across a large corpus produces useful results rather than noise. The work of turning a vague intent ("find risks") into a precise standard ("reciprocal indemnification is required; liability caps cannot exclude gross negligence") is human work. It's the hardest part. And it's the part that makes everything else possible.
 
 The difference:
 
@@ -52,17 +56,17 @@ This is true in every domain:
 - **Finance**: Institutions self-report risk exposure. Rating agencies trust the self-reports.
 - **Science**: Papers self-report reproducibility. Citation networks amplify the claim without verifying it.
 
-A model that can hold the entire corpus can do what no human team practically could: read the claims, read the source material, and check whether they match. Not by sampling. Not by auditing a random subset. All of it.
+A model that can hold a large portion of the corpus can do what no human team practically could: read the claims, read the source material, and check whether they match. Not by sampling. Not by auditing a random subset. Exhaustively, within the bounds of what fits in context, and iteratively for the rest.
 
-This is not a hard task for AI. It was a hard task for humans. That asymmetry is the entire point.
+The scale is new. The difficulty isn't gone. Entity resolution, versioning, ambiguity, conflicting sources with no ground truth, non-local context where "matches" depends on interpretation — these are hard for reasons that have nothing to do with human bandwidth. They're hard because the problem structure is hard. A model can attempt exhaustive verification; whether the results are trustworthy depends on the messiness of the corpus and the precision of the axioms. The asymmetry is real — humans couldn't even attempt this — but "can attempt at scale" is not the same as "will get it right."
 
 ## The Reasoning Engine
 
 What a frontier model becomes when you give it axioms and a corpus:
 
-**It can hold the entire corpus in working memory and reason across all of it simultaneously.** No human can. Not a team. Not a department. Not an industry. The structural patterns that emerge from seeing the whole system at once — which categories get exceptions and which don't, which sources are cited circularly, which dependencies terminate in dead ends — these are not insights that were hiding. They are queries against a dataset that was too large to query until now.
+**It can reason across far more of the corpus than any human.** Not all of it at once — not yet, and maybe not reliably even when context windows allow it. Models suffer attention dilution, mid-context loss, salience effects. But the structural patterns that emerge from seeing even a large fraction of the system — which categories get exceptions and which don't, which sources are cited circularly, which dependencies terminate in dead ends — these are queries against a dataset that was too large to query until now. The results need validation. The attempt is what's new.
 
-**It can verify every claim the system makes about itself.** Read the index. Read the source. Check whether they match. At scale. Across every entry. The gap between claimed and actual is where the interesting findings live.
+**It can attempt to verify every claim the system makes about itself.** Read the index. Read the source. Check whether they match. At scale. The gap between claimed and actual is where the interesting findings live — but the verification is only as good as the model's ability to parse ambiguity and the corpus's amenability to machine-readable checking.
 
 **It can trace dependency graphs to their terminus.** Every reference, every delegation, every exception, every "notwithstanding" clause. Humans follow chains until they get tired. Models follow every chain in the corpus.
 
@@ -115,7 +119,7 @@ The Disintermediation Principle: keep frontier models in the critical path. Buil
 - Hard-coded reasoning flows that substitute application logic for model judgment
 - Consensus algorithms that average away the signal
 - Prompt management systems that templatize what should be dynamic
-- Traditional RAG that fragments the corpus and hides the macro-structure behind Top-K similarity. If the model only sees the snippets an embedding model thought were relevant, you've already decided what matters
+- Retrieval pipelines where the model only sees what a similarity search thought was relevant. Top-K RAG has legitimate uses — security, governance, cost ceilings, auditability — but if it's the *only* way data reaches the model, you've pre-decided what matters. The model should direct its own retrieval: multi-hop, graph-aware, iterative. Dumb retrieval is the problem, not retrieval itself
 
 When new models drop — and they will, continuously, each one more capable than the last — systems built with models in the critical path get better automatically. The axioms stay the same. The corpus stays the same. The model's ability to reason across both improves.
 
@@ -132,6 +136,10 @@ For any system you're building with AI, ask:
 5. **Is the model reasoning or performing?** If it's proposing systems it can't operate, it has left the critical path. A model that stays in the critical path says "here's what I see in the data and here's what I don't know" — not "here's your production-grade implementation, run it quarterly."
 
 The goal is not to build systems that use AI. It is to build systems where AI reasons honestly.
+
+## What's Missing From This Essay
+
+Concrete case studies. An end-to-end walkthrough — the axiom, the traversal, the discovered pattern, the validation — would do more than the manifesto tone. I don't have those yet. This essay is the thinking that precedes them: the framework for deciding what to build, before building it. The case studies come next, and I expect the framework to survive some of them and break on others. That's how axioms get tuned.
 
 ---
 
