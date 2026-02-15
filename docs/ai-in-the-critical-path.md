@@ -12,9 +12,9 @@ Law has 275,000 sections of statute and regulation. Medicine has millions of pap
 
 The entire history of expertise in every field is humans reasoning about fragments of a system too large for any brain to hold at once.
 
-Frontier models do not have that limitation.
+Frontier models do not have that limitation — in principle. In practice, even a two-million-token context window can't fit millions of medical papers or decades of financial transactions into a single prompt. The asymmetry is real but not infinite. What changes is the unit of reasoning: a human reasons about one document at a time; a model reasons about tens of thousands at a time, and can traverse the rest through agentic tool use — following chains, pulling in what it needs, building understanding iteratively across the full corpus rather than staring at fragments.
 
-This is not an incremental improvement. It is a categorical change in what analysis is possible. The patterns that are invisible when you can only see fragments become obvious when you can see the whole thing.
+This is not an incremental improvement. It is a categorical change in what analysis is possible. The patterns that are invisible when you can only see fragments become obvious when you can see the structure. Not always in a single pass — sometimes through autonomous traversal, hierarchical reasoning, or iterative deepening — but with the model in the driver's seat, deciding what to look at next, not a retrieval pipeline deciding for it.
 
 ---
 
@@ -33,6 +33,10 @@ When you give a model axioms and a corpus:
 - It can trace dependency graphs to their terminus — every cross-reference, every delegation, every exception — where a human follows the chain until they get tired, usually three hops in.
 
 The axioms are what make this reasoning rather than retrieval. Without them, a model summarizes. With them, it evaluates.
+
+But axioms are hard to write. Rules in complex human systems are rarely binary — they're contextual, contradictory, exception-laden. If a human sets a slightly flawed axiom, the model's immense rigor will systematically apply that flaw across the entire corpus. A bad axiom at scale is worse than no axiom at all, because it looks like rigorous analysis.
+
+This is why the partnership matters. Axioms aren't set once and forgotten. They're tuned — the human watches what the model does with them, catches where the axiom produces absurd results, and refines. The model's job is to apply the axioms ruthlessly. The human's job is to notice when ruthless application reveals that the axiom was wrong.
 
 ---
 
@@ -105,6 +109,8 @@ If you have the expert who can build and operate the proposed system, you didn't
 
 **What this means for the critical path:** A model in the critical path must reason, not perform. It must stay in the loop as a thinking partner — explaining tradeoffs, flagging what it doesn't know, signaling where its competence ends — not architect itself out by proposing automation. The moment a model says "here's the system, run it quarterly, you're done," it has left the critical path. The moment it presents reading-about as having-built, it has broken the partnership.
 
+**The architectural cure is execution.** The most effective way to break confident incompetence is to make the model run what it proposes. If it suggests an intractable Pyomo formulation, the infrastructure should force it to actually execute it. When it hits a `MemoryError` or a solver timeout, the reading-about illusion shatters. It's forced to iterate, simplify, approximate — to find the pragmatic middle that real engineering lives in. Reality is the ultimate axiom.
+
 The model's actual capability — holding the entire corpus, reasoning across all of it, checking claims against axioms — is the valuable thing. The confident proposal of systems it cannot operate is the failure mode that destroys that value. The discipline is keeping the model doing what it's good at and honest about what it's not.
 
 ---
@@ -114,8 +120,10 @@ The model's actual capability — holding the entire corpus, reasoning across al
 The Disintermediation Principle: keep frontier models in the critical path. Build infrastructure that amplifies model capabilities, not workflow that replaces model judgment.
 
 **Do build:**
-- Data access layers that let models reach the full corpus (MCP tools, embeddings, graph queries)
-- Compute infrastructure that removes context limits as a constraint (chunking, caching, vector search for retrieval)
+- Data access layers that let models reach the full corpus (MCP tools, graph queries, autonomous tool use)
+- Massive context windows with context caching, so the model holds as much as possible in active memory and reasons across it directly
+- Agentic traversal for what exceeds context — the model decides what to pull in next, not a retrieval pipeline. Embeddings and vector search serve the model's queries, not replace its judgment about what's relevant
+- Execution environments where models run what they propose — sandboxed interpreters, compilers, solvers — so confident proposals meet reality immediately instead of weeks later
 - Verification pipelines where models check claims against source material
 - Axiom frameworks that give models something to reason from, not just about
 
