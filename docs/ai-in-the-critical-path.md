@@ -152,3 +152,9 @@ For any system you're building with AI, ask:
 5. **Is the model reasoning or performing?** If it's proposing systems it can't operate, it has left the critical path. A model that stays in the critical path says "here's what I see in the data and here's what I don't know" — not "here's your production-grade implementation, run it quarterly."
 
 The goal is not to build systems that use AI. It is to build systems where AI reasons honestly.
+
+---
+
+## What's Missing From This Document
+
+Concrete case studies. An end-to-end walkthrough — the axiom, the traversal, the discovered pattern, the validation — would do more than the manifesto tone. This document is the thinking that precedes them: the framework for deciding what to build, before building it. The case studies come next, and the framework should be expected to survive some of them and break on others. That's how axioms get tuned.
