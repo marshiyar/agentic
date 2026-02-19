@@ -1,5 +1,27 @@
 {
   "mcpServers": {
+    "gcp-compute": {
+      "type": "http",
+      "url": "https://compute.googleapis.com/mcp",
+      "headers": { "x-goog-user-project": "${GOOGLE_CLOUD_PROJECT}" }
+    },
+    "gcp-resources": {
+      "type": "http",
+      "url": "https://cloudresourcemanager.googleapis.com/mcp",
+      "headers": { "x-goog-user-project": "${GOOGLE_CLOUD_PROJECT}" }
+    },
+    "gcloud": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/gcloud-mcp"]
+    },
+    "observability": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/observability-mcp"]
+    },
+    "gcp-storage": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/storage-mcp"]
+    },
     "multimodel": {
       "command": "npx",
       "args": ["tsx", "mcp-servers/multimodel/src/index.ts"]
@@ -11,10 +33,6 @@
     "vertex": {
       "command": "npx",
       "args": ["tsx", "mcp-servers/vertex/src/index.ts"]
-    },
-    "gcp": {
-      "command": "npx",
-      "args": ["tsx", "mcp-servers/gcp/src/index.ts"]
     }
   }
 }

@@ -106,15 +106,59 @@ These are built in — no setup required:
 
 Enable plugins: `claude code` → settings → plugins
 
-## 7. Custom MCP Servers Setup
+## 6b. Google Cloud CLI
+
+Required for GCP MCP servers (both Google official and custom vertex).
+
+### macOS (Apple Silicon)
+
+```bash
+brew install --cask google-cloud-sdk
+```
+
+Or manual install:
+```bash
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-darwin-arm.tar.gz
+tar -xf google-cloud-cli-darwin-arm.tar.gz
+./google-cloud-sdk/install.sh
+```
+
+### Ubuntu / WSL
+
+```bash
+sudo apt-get install ca-certificates gnupg curl
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg \
+  --dearmor -o /usr/share/keyrings/cloud.google.gpg
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] \
+  https://packages.cloud.google.com/apt cloud-sdk main" | \
+  sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+sudo apt-get update && sudo apt-get install google-cloud-cli
+```
+
+### Post-install (all platforms)
+
+```bash
+gcloud init                              # login + select project
+gcloud auth application-default login    # ADC for MCP servers
+gcloud components install beta           # for MCP server management
+```
+
+Verify: `gcloud auth list` and `gcloud config list`
+
+## 7. MCP Servers Setup
+
+### Google Official MCPs (no local install needed)
+
+The `.mcp.json` includes Google remote MCPs (Compute Engine, Resource Manager) and local MCPs (gcloud, observability, storage). These use gcloud CLI auth — no additional install required, npx handles the local packages.
+
+### Custom MCP Servers
 
 ```bash
 cp -r ~/.agentic/mcp-servers ./
 cp ~/.agentic/.mcp.json ./
 cd mcp-servers/multimodel && npm install && cd ..
 cd serverless && npm install && cd ..
-cd vertex && npm install && cd ..
-cd gcp && npm install && cd ../..
+cd vertex && npm install && cd ../..
 ```
 
 Restart Claude Code after setup.
@@ -163,6 +207,15 @@ nvm install --lts
 # Claude Code
 npm install -g @anthropic-ai/claude-code
 
+# Google Cloud CLI
+sudo apt-get install ca-certificates gnupg curl
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg \
+  --dearmor -o /usr/share/keyrings/cloud.google.gpg
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] \
+  https://packages.cloud.google.com/apt cloud-sdk main" | \
+  sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+sudo apt-get update && sudo apt-get install google-cloud-cli
+
 # Clone agentic
 git clone https://github.com/jasonhoffman/agentic ~/agentic
 mkdir -p ~/.claude
@@ -183,7 +236,7 @@ export GOOGLE_CLOUD_PROJECT=your-project-id
 
 Or use dotenvx (same as macOS/WSL) if you prefer encrypted secrets.
 
-Vertex AI and GCP MCPs use Application Default Credentials (ADC) — automatic on GCP VMs with a service account. On macOS/WSL: `gcloud auth application-default login`.
+ADC is automatic on GCP VMs with a service account. Google official MCPs (gcloud, observability, storage) use ADC — no additional auth setup needed on GCP.
 
 ### MCP servers for a project
 
@@ -191,8 +244,10 @@ Vertex AI and GCP MCPs use Application Default Credentials (ADC) — automatic o
 cd ~/your-project
 cp -r ~/agentic/mcp-servers ./
 cp ~/agentic/.mcp.json ./
-cd mcp-servers/multimodel && npm install && cd ../serverless && npm install && cd ../vertex && npm install && cd ../gcp && npm install && cd ../..
+cd mcp-servers/multimodel && npm install && cd ../serverless && npm install && cd ../vertex && npm install && cd ../..
 ```
+
+Google local MCPs (gcloud, observability, storage) don't need local install — npx handles it.
 
 ### Daily workflow
 

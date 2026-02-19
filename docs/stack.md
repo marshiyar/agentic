@@ -97,40 +97,58 @@ What agentic should provide. Capabilities, not frameworks.
 
 ## MCP Strategy
 
-Claude Code is the end user.
+Claude Code is the end user. Three layers: Google official (remote + local), custom (what Google doesn't cover).
+
+### Google Remote MCPs (Streamable HTTP, hosted by Google)
+
+| MCP | Endpoint | Purpose |
+|-----|----------|---------|
+| `gcp-compute` | `compute.googleapis.com/mcp` | VM lifecycle (headless Claude Code) |
+| `gcp-resources` | `cloudresourcemanager.googleapis.com/mcp` | Project discovery/management |
+
+Auth: OAuth 2.0 via gcloud CLI. More available when needed: BigQuery, Spanner, Cloud SQL, AlloyDB, Firestore, Bigtable, Cloud Logging, Cloud Monitoring, GKE, Security Ops.
+
+### Google Local MCPs (stdio, npm packages)
+
+| MCP | Package | Purpose |
+|-----|---------|---------|
+| `gcloud` | `@google-cloud/gcloud-mcp` | Anything gcloud can do (projects, billing, APIs, IAM, DNS, etc.) |
+| `observability` | `@google-cloud/observability-mcp` | Cloud Logging, Monitoring, Trace (12+ tools) |
+| `gcp-storage` | `@google-cloud/storage-mcp` | GCS buckets and objects (23+ tools) |
+
+Auth: ADC via `gcloud auth application-default login`. No local install — npx handles it.
+
+### Custom MCPs (stdio, our code)
 
 | MCP | Tools | Purpose |
 |-----|-------|---------|
 | `multimodel` | query_openai, query_gemini, embed_voyage, parallel_query | AI model APIs (direct) |
 | `serverless` | discover, invoke | Edge functions (Supabase) |
 | `vertex` | query_vertex, batch_predict, custom_job, job_status, list_jobs | Vertex AI generation (ADC), batch prediction, GPU/TPU jobs |
-| `gcp` | list_projects, create_project, list_billing_accounts, link_billing, enable_api, create_instance, list_instances, instance_action, gcs_* | GCP infrastructure: projects, billing, APIs, VMs, GCS |
+
+Custom servers only exist for what Google doesn't cover: non-GCP AI APIs, Supabase, and Vertex AI batch/custom jobs.
 
 **Why this works:**
 
-- MCP tools are structural constraints — I use what exists instead of improvising
-- CLAUDE.md is advisory — I might follow it, might not
-- Four thin MCPs prevent throwaway scripts without recreating SDKs/CLIs
-
-**What MCPs don't do:**
-
-- Deploy (use CLI)
-- Manage cron (use CLI/dashboard)
-- Replicate SDK features
+- Google official MCPs for GCP infrastructure — maintained by Google, always current
+- gcloud MCP as universal fallback — anything gcloud can do, Claude Code can do
+- Custom MCPs only where no official option exists
+- MCP tools are structural constraints — Claude Code uses what exists instead of improvising
 
 ## Have
 
+- [x] Google remote MCPs — Compute Engine, Resource Manager (expandable to 12 services)
+- [x] Google local MCPs — gcloud, observability, storage (via npx)
 - [x] `mcp-servers/multimodel/` — Query OpenAI, Gemini, Voyage from Claude Code
 - [x] `mcp-servers/serverless/` — Discover and invoke Supabase edge functions
 - [x] `mcp-servers/vertex/` — Vertex AI generation (ADC), batch prediction, GPU/TPU custom jobs
-- [x] `mcp-servers/gcp/` — GCP infrastructure: projects, billing, APIs, VMs, GCS
 - [x] `supabase/get_api_key.sql` — Vault function for secure key access
 - [x] `USE-AS-GLOBAL-CLAUDE.md` — Development standards
 - [x] `scaffold-lib.sh` — React Native + Supabase /lib structure
-- [x] Claude Code auto-memory — built-in session continuity (replaces _NEXT_SESSION_MEMO.md)
+- [x] Claude Code auto-memory — built-in session continuity
 - [x] Built-in plugins — commit-commands, code-review, feature-dev, context7, frontend-design, etc.
-- [x] Built-in plan mode (`EnterPlanMode`) — replaces custom /plan command
-- [x] Built-in explore agents (`Task` tool with `Explore` subagent) — replaces custom /research command
+- [x] Built-in plan mode — replaces custom /plan command
+- [x] Built-in explore agents — replaces custom /research command
 
 ## Need
 
