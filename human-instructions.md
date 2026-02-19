@@ -112,7 +112,9 @@ Enable plugins: `claude code` → settings → plugins
 cp -r ~/.agentic/mcp-servers ./
 cp ~/.agentic/.mcp.json ./
 cd mcp-servers/multimodel && npm install && cd ..
-cd serverless && npm install && cd ../..
+cd serverless && npm install && cd ..
+cd vertex && npm install && cd ..
+cd gcp && npm install && cd ../..
 ```
 
 Restart Claude Code after setup.
@@ -176,9 +178,12 @@ export ANTHROPIC_API_KEY=sk-ant-...
 export OPENAI_API_KEY=sk-...
 export GEMINI_API_KEY=AI...
 export VOYAGE_API_KEY=vo-...
+export GOOGLE_CLOUD_PROJECT=your-project-id
 ```
 
 Or use dotenvx (same as macOS/WSL) if you prefer encrypted secrets.
+
+Vertex AI and GCP MCPs use Application Default Credentials (ADC) — automatic on GCP VMs with a service account. On macOS/WSL: `gcloud auth application-default login`.
 
 ### MCP servers for a project
 
@@ -186,7 +191,7 @@ Or use dotenvx (same as macOS/WSL) if you prefer encrypted secrets.
 cd ~/your-project
 cp -r ~/agentic/mcp-servers ./
 cp ~/agentic/.mcp.json ./
-cd mcp-servers/multimodel && npm install && cd ../serverless && npm install && cd ../..
+cd mcp-servers/multimodel && npm install && cd ../serverless && npm install && cd ../vertex && npm install && cd ../gcp && npm install && cd ../..
 ```
 
 ### Daily workflow

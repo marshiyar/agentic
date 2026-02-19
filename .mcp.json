@@ -7,6 +7,14 @@
     "serverless": {
       "command": "npx",
       "args": ["tsx", "mcp-servers/serverless/src/index.ts"]
+    },
+    "vertex": {
+      "command": "npx",
+      "args": ["tsx", "mcp-servers/vertex/src/index.ts"]
+    },
+    "gcp": {
+      "command": "npx",
+      "args": ["tsx", "mcp-servers/gcp/src/index.ts"]
     }
   }
 }

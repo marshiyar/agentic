@@ -103,13 +103,14 @@ Claude Code is the end user.
 |-----|-------|---------|
 | `multimodel` | query_openai, query_gemini, embed_voyage, parallel_query | AI model APIs (direct) |
 | `serverless` | discover, invoke | Edge functions (Supabase) |
-| `vertex` | *(future)* | GPU/TPU, Vertex AI, Python ML |
+| `vertex` | query_vertex, batch_predict, custom_job, job_status, list_jobs | Vertex AI generation (ADC), batch prediction, GPU/TPU jobs |
+| `gcp` | list_projects, create_project, list_billing_accounts, link_billing, enable_api, create_instance, list_instances, instance_action, gcs_* | GCP infrastructure: projects, billing, APIs, VMs, GCS |
 
 **Why this works:**
 
 - MCP tools are structural constraints — I use what exists instead of improvising
 - CLAUDE.md is advisory — I might follow it, might not
-- Two thin MCPs prevent throwaway scripts without recreating SDKs/CLIs
+- Four thin MCPs prevent throwaway scripts without recreating SDKs/CLIs
 
 **What MCPs don't do:**
 
@@ -121,6 +122,8 @@ Claude Code is the end user.
 
 - [x] `mcp-servers/multimodel/` — Query OpenAI, Gemini, Voyage from Claude Code
 - [x] `mcp-servers/serverless/` — Discover and invoke Supabase edge functions
+- [x] `mcp-servers/vertex/` — Vertex AI generation (ADC), batch prediction, GPU/TPU custom jobs
+- [x] `mcp-servers/gcp/` — GCP infrastructure: projects, billing, APIs, VMs, GCS
 - [x] `supabase/get_api_key.sql` — Vault function for secure key access
 - [x] `USE-AS-GLOBAL-CLAUDE.md` — Development standards
 - [x] `scaffold-lib.sh` — React Native + Supabase /lib structure
@@ -132,7 +135,6 @@ Claude Code is the end user.
 ## Need
 
 - [ ] GCP headless VM setup (see human-instructions.md)
-- [ ] Vertex/GCP MCP server (when first GPU/TPU or Vertex AI use case arrives)
 - [ ] Supabase edge function patterns
 - [ ] EAS — Native + web deployment, Cloudflare
 
